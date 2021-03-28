@@ -1,10 +1,6 @@
 [TOC]
 
-# OneDayDevOps
 
-Build a DevOps platform in one day using open source components
-
-Blog: [OneDayDevOps: One click deploy a DevOps platform](https://blog.csdn.net/nklinsirui/article/details/89416151)
 
 ## Get started
 
@@ -15,18 +11,19 @@ yum install git -y
 git --version
 ```
 
-### Clone OneDayDevOps
+### Clone 
 
 Run below commands on an empty directory:
 ```bash
-git clone https://github.com/cookcodeblog/OneDayDevOps.git
-cd OneDayDevOps
+git clone https://github.com/dendil/dendy_ops_init_C7.git
+cd dendy_ops_init_C7
 find . -name '*.sh' -exec chmod u+x {} \;
 ```
 
 
 
-
+#
+s
 
 ### Use Aliyun Yum repo
 
