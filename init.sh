@@ -148,20 +148,18 @@ function HideVersion(){
 function Safesshd(){
     sshd_file=/etc/ssh/sshd_config
     if [ `grep "52112" $sshd_file|wc -l` -eq 0 ];then
-        sed -ir "13 iPort 52112\nPermitRootLogin no\nPermitEmptyPasswords no\nUseDNS no\nGSSAPIAuthentication no" $sshd_file
-        sed -i 's/#ListenAddress 0.0.0.0/ListenAddress '${IP_addr}':52112/g' $sshd_file
-        sed -i 's/ListenAddress 192.168.208.128:52112/ListenAddress '${IP_addr}':52112/g' $sshd_file
-    systemctl  restart  sshd >/dev/null 2>&1
-    Msg "sshd config .....ok!"
+        cp ssh/ssh*config /etc/ssh/
+        systemctl  restart  sshd >/dev/null 2>&1
+        Msg "sshd config .....ok!"
     fi
 }
 ##### Open file   修改文件描述符65534 ###############################
 function Openfile(){
-    if [ `cat /etc/security/limits.conf|grep 65536|grep -v grep |wc -l ` -lt 1 ];then
+    if [ `cat /etc/security/limits.conf|grep 102400|grep -v grep |wc -l ` -lt 1 ];then
         /bin/cp /etc/security/limits.conf  /etc/security/limits.conf.$(date +%U%T)
         sed -i '/#\ End\ of\ file/ i\*\t\t-\tnofile\t\t65536' /etc/security/limits.conf
     fi
-    ulimit -HSn 65536
+    ulimit -HSn 102400
     Msg "open file........ok"
 }
 ##### hosts        同步hosts 文件 主机名#############################
@@ -478,6 +476,29 @@ function bin_grep(){
         echo " ${string2} "  >> ${string2}
     fi
 }
+function install_ops(){
+    if [ ! -d  /usr/local/dendyops ];then
+        cp -a dendyops /usr/local
+    fi
+Msg 'install dendyops'
+}
+function add_sudoer(){
+    cp profile.d/* /etc/profile.d/
+
+     Msg 'set profile ok'
+
+    if [  `cat /etc/passwd  |grep dendy|wc -l ` -eq 0 ];then
+
+
+    useradd dendy
+    echo 'Qwe12345678990' | passwd dendy --stdin
+    fi
+    if [ `grep dendy /etc/sudoers |wc -l` -eq 0 ];then
+    chmod u+w /etc/sudoers
+    echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    chmod u-w /etc/sudoers
+    fi
+}
 
 # 系统初始化
 function system_init(){
@@ -490,6 +511,8 @@ function system_init(){
     close_iptables
     #清除版本信息（安全操作）
     HideVersion
+    install_ops
+    add_sudoer
     #安全化 ssh
     Safesshd
     # 扩大文件描述符
