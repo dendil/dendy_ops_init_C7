@@ -7,8 +7,8 @@ if [ ! -f /root/.ssh/authorized_keys ];then
     chmod 600 /root/.ssh/authorized_keys
 fi
 
-if ( ! grep -q "root@monitor" /root/.ssh/authorized_keys );then
-    echo 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6wvQhFUKBK+YvAmJg3TtUuQ2iw/DO+0cpIPVVold1Nvs+I8b40FIDj+64gUla+TAGXZcCA2KSFZUC1u9j5T3K328cfXC+bFMX6Zxx52KJP7tR9K7gpdNL5PVVpMC+x4zgtbKhIeMnBWQGczzjf1Jux2hrpCnaPBcjVnCH2fm1k65gB7Ctv1269/HSfoeRZ9dSUZwT9Kutm3X4cIjCTYa4xQcLgdgSldniUcyTEpsvyYukXZayCzwL0n0hdpH+z6F4t8FmbCOJQBZwcm93XA2QDsCGeZwDmPtalOdWvOq3ko/Lm0ttglmyzokACz1R6BiHTgRHbQ7bv1x/J7IdB087Q== root@monitor' >> /root/.ssh/authorized_keys
+if ( ! grep -q "dendy@Dendy" /root/.ssh/authorized_keys );then
+    echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeZG3XJpb3hpFg/KXXqbjwl4CAIks+k0sdhE67h7e7gtmpeZxHnKIVCPaQb2KfEKoCka9DNKH4VMYJ7Ce6zJaj+cHu7nRnrumrhmgXMm0bv7UjitzosrUBpdtkwBH/y+Dz9fhqOaNIRM/vaNG4azSTNddjyHqzaWZ7vhZIuATkaGIPI3GO59opRZV5IEUdZoHL9Ea9duYMoQwvMZfTKR59qD2/kLmgwO7Q73TqyONIRN9R3VA9ObSX03H2HXwgMzbLxgvtoSiwFzbTY05OsUojRHyV86Cmj1/Twn0hH1oZgBkLAn+3gPcmepzXTTJmQeavT+Nze8Mk6pahQJC8D369RQc61tXJ3Y5HzQAhm/Q5Ykv4qrehu7t6VwUESlXwYkHbxyoAQvQRDBlVVUjFK/I9jNag7fJOr94kY4Z5zMiQFZ/Txurlsew8tC9qIQSXXH+0GChuBgdTZyfVqIMuPu9yL9qsJNJMjlef8vROzn0eQAvcG996b2NbY3QNyyPB/Js= dendy@Dendy' >> /root/.ssh/authorized_keys
 fi
 
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-. system_init_functions.sh
+. ./system_init_functions.sh
 newhostname=$1
 
 #if [ ! -z $newhostname ];then
