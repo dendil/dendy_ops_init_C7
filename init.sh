@@ -1,6 +1,7 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
+
 . /etc/init.d/functions
 ######################################################################
 #锁文件
@@ -9,25 +10,7 @@ LOCK_DIR="/var/lock/auto_install"
 #日志文件
 LOG_DIR="/var/log"
 LOG_FILE="auto_install.log"
-# 同步时间
-function sync_date(){
-    md5sum_check /etc/localtime  /usr/share/zoneinfo/Asia/Shanghai
-    if [ ! "$?" -eq "0" ];then
-        rm -f /etc/localtime >/dev/null 2>&1
-        ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime >/dev/null 2>&1
-        Msg "timezone Shanghai completed ! " >/dev/null 2>&1
-    else
-            log_info "timezone Shanghai completed ! (old)"  >/dev/null 2>&1
-    fi
-    if [ $(rpm -qa ntp |wc -l) -eq 0 ] ;then
-        /usr/bin/yum -y install ntp >/dev/null 2>&1
-        Msg "ntp installed completed ! "  >/dev/null 2>&1
-    else 
-        log_info "ntp installed  ! " >/dev/null 2>&1
-    fi
-    ntpdate  0.cn.pool.ntp.org >/dev/null 2>&1
-    clear
-}
+
 # 判断是否可以上网####################################################
 function test_ping(){
     if [ ! -f /etc/selinux/_test_ping ];then
@@ -147,7 +130,8 @@ function HideVersion(){
 ##### Safe sshd   优化 sshd 服务#####################################
 function Safesshd(){
     sshd_file=/etc/ssh/sshd_config
-    if [ `grep "52112" $sshd_file|wc -l` -eq 0 ];then
+    #if [ `grep "52112" $sshd_file|wc -l` -eq 0 ];then
+    if [ `grep "22" $sshd_file|wc -l` -eq 0 ];then
         cp ssh/ssh*config /etc/ssh/
         systemctl  restart  sshd >/dev/null 2>&1
         Msg "sshd config .....ok!"
@@ -157,14 +141,14 @@ function Safesshd(){
 function Openfile(){
     if [ `cat /etc/security/limits.conf|grep 102400|grep -v grep |wc -l ` -lt 1 ];then
         /bin/cp /etc/security/limits.conf  /etc/security/limits.conf.$(date +%U%T)
-        sed -i '/#\ End\ of\ file/ i\*\t\t-\tnofile\t\t65536' /etc/security/limits.conf
+        sed -i '/#\ End\ of\ file/ i\*\t\t-\tnofile\t\t102400' /etc/security/limits.conf
     fi
     ulimit -HSn 102400
     Msg "open file........ok"
 }
 ##### hosts        同步hosts 文件 主机名#############################
-function hosts(){
-    if [ `grep "$IP_addr $New_hostname" /etc/hosts |wc -l` -eq 0 ];then
+function hosts_hostname(){
+    if [ `grep "$IP_addr $New_hostname" /etc/hosts |wc -l` -lt 1  ];then
         echo "$IP_addr $New_hostname"  >> /etc/hosts
     fi
     hostnamectl set-hostname --static $New_hostname
@@ -188,16 +172,56 @@ function boot_centos7(){
  done
  echo -e "\nDONE"
 }
+# 同步时间
+function sync_date(){
+   
+    if [ $(rpm -qa ntp |wc -l) -lt 1 ] ;then
+        /usr/bin/yum -y install ntp >/dev/null 2>&1
+        Msg "ntp installed completed ! "  >/dev/null 2>&1
+    else 
+        log_info "ntp installed  ! " >/dev/null 2>&1
+    fi
+    systemctl stop ntpd
+    systemctl disable ntpd
+    ntpdate  0.cn.pool.ntp.org >/dev/null 2>&1
+    
+}
 ##### 定时同步时间  #################################################
 function time_ntp(){
-    if [ -f "/var/spool/cron/root" ];then
-        if [ `grep 0.cn.pool.ntp.org /var/spool/cron/root|grep -v grep |wc -l ` -lt 1 ];then
-            echo "*/5 * * * * root /usr/sbin/ntpdate 0.cn.pool.ntp.org >/dev/null 2>&1 " >> /var/spool/cron/root
-        fi
-    else
-        echo "*/5 * * * * root /usr/sbin/ntpdate 0.cn.pool.ntp.org >/dev/null 2>&1 " >> /var/spool/cron/root
+     
+    if [ `timedatectl  |grep Shanghai|wc -l ` -lt 1  ];then
+       timedatectl set-timezone Asia/Shanghai
     fi
-    Msg "crontab time config"
+    sync_date
+    
+     if [ `timedatectl  |grep    'NTP enabled: yes'` -lt 1  ];then
+           # Enable ntp time sync
+        timedatectl set-ntp yes
+    fi
+
+     if [ `timedatectl  |grep    'RTC in local TZ: yes'` -lt 1  ];then
+            # Use local RTC time
+        timedatectl set-local-rtc 1
+    fi
+
+
+    if [ `rpm -qa chrony|wc -l ` -lt 1 ];then
+        yum install chrony -y >/dev/null 2>&1
+        echo 'server 0.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        echo 'server 1.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        echo 'server 2.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        echo 'server 3.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+    else
+        if [ `grep 'server 0.cn.pool.ntp.org iburst' /etc/chrony.conf` -lt 1  ];then
+
+        echo 'server 0.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        echo 'server 1.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        echo 'server 2.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        echo 'server 3.cn.pool.ntp.org iburst' >> /etc/chrony.conf
+        fi
+    fi
+    systemctl enable chronyd
+    systemctl start chronyd
 }
 # 路径 path 软件名 software name#####################################
 # 基础信息
@@ -363,7 +387,7 @@ function check_sys(){
         log_error "Error: Not enough memory to install LAMP. The system needs memory: ${tram}MB*RAM + ${swap}MB*Swap > 480MB"
         exit 1
     fi
-    [ $RamSum -lt 600 ] && PHPDisable='--disable-fileinfo';
+ 
 }
 # Pre-installation settings
 function pre_installation_settings(){
@@ -399,7 +423,7 @@ function pre_installation_settings(){
     Msg "wait ... to start...or Press Ctrl+C to cancel"
     #char=`get_char`
     #Remove Packages
-    cd ~
+
 }
 # download Centos-Base.repo
 function config_yum(){
@@ -450,7 +474,7 @@ function config_yum(){
         Msg "yum is  completed! "
     fi
     SOFT=""
-    for soft in  lrzsz dos2unix ntp gcc rsync salt-minion vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools
+    for soft in  lrzsz dos2unix ntp gcc bc rsync chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl bind-utils unzip mtr
     do
         if [ "`rpm -qa $soft |wc -l`"  -eq 0 ] ;then
             SOFT=" $SOFT $soft "
@@ -477,13 +501,17 @@ function bin_grep(){
     fi
 }
 function install_ops(){
-    if [ ! -d  /usr/local/dendyops ];then
+    if [ ! -d  /opt/dendyops ];then
+        chmod u+x -R dendyops
         cp -a dendyops /usr/local
     fi
-Msg 'install dendyops'
+    if [ ! -f  /etc/profile.d/dendyops_alias.sh  ];then
+     cp profile.d/* /etc/profile.d/
+    fi
+    Msg 'install dendyops  profile'
 }
 function add_sudoer(){
-    cp profile.d/* /etc/profile.d/
+   
 
      Msg 'set profile ok'
 
@@ -491,7 +519,7 @@ function add_sudoer(){
 
 
     useradd dendy
-    echo 'Qwe12345678990' | passwd dendy --stdin
+    echo 'QQwechat12345678990' | passwd dendy --stdin
     fi
     if [ `grep dendy /etc/sudoers |wc -l` -eq 0 ];then
     chmod u+w /etc/sudoers
@@ -502,15 +530,15 @@ function add_sudoer(){
 
 # 系统初始化
 function system_init(){
-    check_folder /scripts
-    check_folder /software
-    check_folder /backup
+    check_folder /opt
+    #check_folder /software
+    #check_folder /backup
     #关闭selinux
     selinux
     # 关闭防火墙
     close_iptables
-    #清除版本信息（安全操作）
-    HideVersion
+    #清除版本信息（安全操作） 一般不开启
+    #HideVersion
     install_ops
     add_sudoer
     #安全化 ssh
@@ -524,7 +552,7 @@ function system_init(){
     # 配置国内yum源
     config_yum
     # 开机启动项精简
-    boot_centos7
+    #boot_centos7
 }
 function main(){
 

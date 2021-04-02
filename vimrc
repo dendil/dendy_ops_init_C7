@@ -6,7 +6,7 @@ set tabstop=4
 set expandtab
 set showmatch
 set shiftwidth=4
-set smartindent "基于autoindent的一些改进后的自动缩进
+"set smartindent "基于autoindent的一些改进后的自动缩进
 filetype indent plugin on   "依据文件类型设置自动缩进
 set showmode
 hi IncSearch term=reverse cterm=reverse

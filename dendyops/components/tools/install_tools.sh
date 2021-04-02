@@ -17,4 +17,4 @@ yum install htop -y
 # mtr
 yum install mtr -y
 # tree
-yum install tree -y
+yum install tree -y  lrzsz dos2unix ntp gcc bc rsync chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl  bind-utils unzip mtr

@@ -32,7 +32,7 @@
 #   CheckHostIP yes
 #   AddressFamily any
 #   ConnectTimeout 0
-#   StrictHostKeyChecking ask
+StrictHostKeyChecking ask
 #   IdentityFile ~/.ssh/identity
 #   IdentityFile ~/.ssh/id_rsa
 #   IdentityFile ~/.ssh/id_dsa

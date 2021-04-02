@@ -14,12 +14,14 @@
 # SELinux about this change.
 # semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
 #
-Port 52112
+
+Port 22
+#Port 52112
 #AddressFamily any
 ListenAddress 0.0.0.0
-
-PermitRootLogin no
-PermitEmptyPasswords no
+PermitRootLogin yes
+#PermitRootLogin no
+#PermitEmptyPasswords no
 #不解析dns ，加速
 UseDNS no
 
