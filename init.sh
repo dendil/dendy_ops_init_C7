@@ -105,21 +105,14 @@ function selinux(){
 }
 #关闭防火墙##########################################################
 function close_iptables(){
- systemctl status firewalld.service  
+     #--关闭此服务
+     systemctl disable firewalld.service >>  /dev/null  2>&1
 
- #--关闭此服务
- systemctl stop firewalld.service    
+    #--关闭此服务
+    systemctl stop firewalld.service >>  /dev/null  2>&1
 
- #--查看firewalld是否开机自动启动
- systemctl list-unit-files |grep firewalld   
- #firewalld.service                           enabled 
-
- #--类似以前的chkconfig xxx off
- systemctl disable firewalld.service 
-
- systemctl list-unit-files |grep firewalld
- systemctl stop  iptables 
- systemctl disable iptables
+    #--查看firewalld是否开机自动启动
+    Msg 'systemctl disable firewalld'
 }
 ##### Hide Version 擦除登陆提示信息系统版本信息######################
 function HideVersion(){
@@ -194,12 +187,12 @@ function time_ntp(){
     fi
     sync_date
     
-     if [ `timedatectl  |grep    'NTP enabled: yes'` -lt 1  ];then
+     if [ `timedatectl  |grep    'NTP enabled: yes'|wc -l` -lt 1  ];then
            # Enable ntp time sync
         timedatectl set-ntp yes
     fi
 
-     if [ `timedatectl  |grep    'RTC in local TZ: yes'` -lt 1  ];then
+     if [ `timedatectl  |grep    'RTC in local TZ: yes' |wc -l ` -lt 1  ];then
             # Use local RTC time
         timedatectl set-local-rtc 1
     fi
@@ -578,7 +571,7 @@ function main(){
     pre_installation_settings
     system_init
     shell_unlock
-    Msg  'script end ,5s exit see log ${LOG_DIR}/${LOG_FILE}'
+    Msg  "script end ,5s exit see log ${LOG_DIR}/${LOG_FILE}"
     sleep 5
 }
 ###没有开启 ip转发

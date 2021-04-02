@@ -9,6 +9,7 @@
 ```bash
 yum install git -y
 git --version
+cd /tmp
 ```
 
 ### Clone 
@@ -22,8 +23,9 @@ find . -name '*.sh' -exec chmod u+x {} \;
 
 
 
-### init centos7
+### Init centos7
 ```bash
+sudo su
 bash  init.sh
 ```
 
