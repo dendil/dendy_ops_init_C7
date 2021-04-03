@@ -12,7 +12,8 @@ fi
 
 
 
+
+
 curl -fsSL https://bootstrap.saltproject.io -o install_salt.sh
-sudo sh install_salt.sh -P -M -x python3
-yum install -y salt-ssh
+sudo sh install_salt.sh -P -x python3
 #../utils/start_service.sh salt-master

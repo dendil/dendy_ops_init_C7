@@ -469,7 +469,7 @@ function config_yum(){
         yum clean all  >/dev/null 2>&1 && echo "1" > /etc/yum.repos.d/test
         Msg "yum is  completed! "
     fi
-    SOFT=" lrzsz dos2unix ntp gcc bc rsync chrony vim \
+    SOFT=" lrzsz dos2unix ntp gcc bc tcl  expect rsync chrony vim \
       wget bash-completion lrzsz nmap  tree htop iftop \
       net-tools python3  yum-utils curl bind-utils unzip mtr"
     
@@ -517,14 +517,16 @@ function install_ops(){
 function add_sudoer(){
    
 
-    Msg 'set profile ok'
+    Msg 'add/mod_sudoer........ '
     if [ "$1" == "update" ];then
         if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
             useradd dendy
-            echo 'QQwechat12345678990' | passwd dendy --stdin
+            echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
         else
             echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
         fi
+        Msg 'add/mod_sudoer........update '
+
     fi
     
 
@@ -532,12 +534,14 @@ function add_sudoer(){
 
 
     useradd dendy
-    echo 'QQwechat12345678990' | passwd dendy --stdin
+    echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
+    Msg 'add/mod_sudoer........user add '
     fi
     if [ `grep dendy /etc/sudoers |wc -l` -lt 1 ];then
     chmod u+w /etc/sudoers
     echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
     chmod u-w /etc/sudoers
+    Msg 'add/mod_sudoer......../etc/sudoers  mod..ed '
     fi
 }
 

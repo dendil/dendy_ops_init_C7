@@ -15,5 +15,5 @@ cat ~/id_rsa.pub >> ~/.ssh/authorized_keys
 
 more ~/.ssh/authorized_keys
 
-rm -f ~/id_rsa.pub
+#rm -f ~/id_rsa.pub
 

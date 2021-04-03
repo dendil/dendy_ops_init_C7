@@ -17,7 +17,7 @@ yum install htop -y
 # mtr
 yum install mtr -y
 # tree
-yum install tree -y  lrzsz dos2unix ntp gcc bc rsync chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl  bind-utils unzip mtr
+yum install tree -y  lrzsz dos2unix ntp gcc bc rsync expect tcl chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl  bind-utils unzip mtr
 
 #yum install -y vim psmisc tcpdump strace gdb libaio rsync gzip zip unzip \ 
 #  autoconf make python-pip  python-devel  libffi-devel libxml2-devel libxslt-devel

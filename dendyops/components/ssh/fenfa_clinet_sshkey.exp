@@ -1,0 +1,18 @@
+#!/usr/bin/expect -f
+if { $argc != 3 } {
+        send_user "usage expect scp-expect.exp file host password \n"
+        exit 1
+}
+#define var 
+set file [lindex $argv 0]
+set host [lindex $argv 1]
+set password [lindex $argv 2]
+set timeout 10
+
+
+spawn ssh-copy-id -i $file  $host
+expect {
+        "*yes/no" {send "yes\r";exp_continue}
+        "*password:" {send "$password\r"}
+}
+expect eof

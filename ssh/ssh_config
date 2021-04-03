@@ -32,11 +32,11 @@
 #   CheckHostIP yes
 #   AddressFamily any
 #   ConnectTimeout 0
-StrictHostKeyChecking ask
+StrictHostKeyChecking no
 #   IdentityFile ~/.ssh/identity
 #   IdentityFile ~/.ssh/id_rsa
 #   IdentityFile ~/.ssh/id_dsa
-    Port 52112
+#   Port 52112
 #   Protocol 2,1
 #   Cipher 3des
 #   Ciphers aes128-ctr,aes192-ctr,aes256-ctr,arcfour256,arcfour128,aes128-cbc,3des-cbc

@@ -4,7 +4,7 @@
 
 ## Get started
 
-### Install Git
+## Install Git
 
 ```bash
 yum install git -y
@@ -12,7 +12,7 @@ git --version
 cd /tmp
 ```
 
-### Clone 
+## Clone 
 
 Run below commands on an empty directory:
 ```bash
@@ -23,7 +23,7 @@ find . -name '*.sh' -exec chmod u+x {} \;
 
 
 
-### Init centos7
+## Init centos7
 ```bash
 sudo su
 bash  init.sh
@@ -43,11 +43,23 @@ bash  init.sh
 
 
 
-### Set New Hostname
+## Set New Hostname
 ```bash
 /opt/components/utils/set_hostname.sh  <newhostname>
 ```
+### Install salt-master  salt-ssh 
+```bash
+/opt/components/saltstack/install_salt_master.sh
 
+```
+
+
+
+### Install salt-minion
+```bash
+/opt/components/saltstack/install_salt_minion.sh
+
+```
 
 ### Use Aliyun Yum repo
 
