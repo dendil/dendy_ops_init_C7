@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-. /etc/init.d/functions
+
 ######################################################################
 #锁文件
 LOCK_FILE="auto_install.lock"
@@ -47,8 +47,7 @@ function shell_lock(){
 # 查看是否上锁########################################################
 function check_lock(){
     if [ -f "${LOCK_DIR}/${LOCK_FILE}" ];then
-        echo " error !  this scripts is  running"
-        kill -9 $ROTATE_PID
+        echo " error !  this scripts is  running ,try mv ${LOCK_DIR}/${LOCK_FILE} to trash"
         exit 1
     fi
 }
@@ -182,7 +181,7 @@ function sync_date(){
     fi
     systemctl stop ntpd
     systemctl disable ntpd
-    ntpdate  0.cn.pool.ntp.org >/dev/null 2>&1
+    ntpdate  0.cn.pool.ntp.org >/dev/null 2>&1 &
     
 }
 ##### 定时同步时间  #################################################
@@ -206,19 +205,16 @@ function time_ntp(){
 
     if [ `rpm -qa chrony|wc -l ` -lt 1 ];then
         yum install chrony -y >/dev/null 2>&1
-        echo 'server 0.cn.pool.ntp.org iburst' >> /etc/chrony.conf
-        echo 'server 1.cn.pool.ntp.org iburst' >> /etc/chrony.conf
-        echo 'server 2.cn.pool.ntp.org iburst' >> /etc/chrony.conf
-        echo 'server 3.cn.pool.ntp.org iburst' >> /etc/chrony.conf
-    else
-        if [ `grep 'server 0.cn.pool.ntp.org iburst' /etc/chrony.conf` -lt 1  ];then
+    fi
+
+        if [ `grep 'server 0.cn.pool.ntp.org iburst' /etc/chrony.conf | wc -l ` -lt 1  ];then
 
         echo 'server 0.cn.pool.ntp.org iburst' >> /etc/chrony.conf
         echo 'server 1.cn.pool.ntp.org iburst' >> /etc/chrony.conf
         echo 'server 2.cn.pool.ntp.org iburst' >> /etc/chrony.conf
         echo 'server 3.cn.pool.ntp.org iburst' >> /etc/chrony.conf
         fi
-    fi
+
     systemctl enable chronyd
     systemctl start chronyd
 }
@@ -281,7 +277,6 @@ function centosversion(){
 function rootness(){
     if [[ $EUID -ne 0 ]]; then
        log_error "Error:This script must be run as root!" 1>&2
-       kill -9 $ROTATE_PID
        exit 1
     fi
 }
@@ -472,17 +467,12 @@ function config_yum(){
         yum clean all  >/dev/null 2>&1 && echo "1" > /etc/yum.repos.d/test
         Msg "yum is  completed! "
     fi
-    SOFT=""
-    for soft in  lrzsz dos2unix ntp gcc bc rsync chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl bind-utils unzip mtr
-    do
-        if [ "`rpm -qa $soft |wc -l`"  -lt 1 ] ;then
-            SOFT=" $SOFT $soft "
-        fi
-    done
-    if [[ ! $SOFT == ""  ]] ;then 
-        yum install  $SOFT  -y >/dev/null 2>&1
-        Msg "$SOFT installed"
-    fi
+    SOFT=" lrzsz dos2unix ntp gcc bc rsync chrony vim \
+      wget bash-completion lrzsz nmap  tree htop iftop \
+      net-tools python3  yum-utils curl bind-utils unzip mtr"
+    
+    yum install  $SOFT  -y >>/dev/null 2>&1
+    Msg "$SOFT installed"
 }
 function set_default_target(){
     if [ `systemctl get-default` != multi-user.target ];then
@@ -512,7 +502,6 @@ function install_ops(){
             cp profile.d/* /etc/profile.d/
              Msg 'update dendyops_ profiles'
         fi
-    fi
     fi
     if [ ! -d  /opt/dendyops ];then
         chmod u+x -R dendyops

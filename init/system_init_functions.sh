@@ -82,7 +82,6 @@ function shell_lock(){
 function check_lock(){
     if [ -f "${LOCK_DIR}/${LOCK_FILE}" ];then
         echo " error !  this scripts is  running,try mv ${LOCK_DIR}/${LOCK_FILE} to trash"
-        kill -9 $ROTATE_PID
         exit 1
     fi
 }
@@ -242,6 +241,9 @@ function rotate(){
              ;;
      esac
  done
+ rotate &
+trap"kill -9 $BG_PID"INT
+ROTATE_PID=$!
 }
 
 # 路径 path 软件名 software name#####################################
@@ -300,7 +302,6 @@ echo $main_ver
 function rootness(){
     if [[ $EUID -ne 0 ]]; then
        log_error "Error:This script must be run as root!" 1>&2
-       kill -9 $ROTATE_PID
        exit 1
     fi
 }
