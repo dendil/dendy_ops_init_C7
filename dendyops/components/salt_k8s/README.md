@@ -15,6 +15,10 @@ cat /opt/components/salt_k8s/host.txt
 # 设置部署节点到其它所有节点的SSH免密码登录（包括本机）
 管理机（以下不做标记皆为admin 管理机）
 ```bash 
+#hosts文件生成
+/opt/components/utils/make_hosts.sh
+mv /etc/hosts{,.bak.$RANDOM} 
+cp /opt/hosts /etc/
 # 生成密钥
 /opt/components/ssh/ssh_key_gen.sh
 # 分发密钥
