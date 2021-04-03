@@ -16,7 +16,7 @@ if [  ! -z $1 ];then
     exit 1
 fi
 passwd=$1
-hostfile=/opt/components/salt_k8s/host.txt
+hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
 if [ -f  $hostfile  ];then
     for i in  `cat  $hostfile |grep -v ^# |awk '{print $3}'`
     do

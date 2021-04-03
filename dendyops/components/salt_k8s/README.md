@@ -2,7 +2,7 @@
 
 服务器节点(如需要请自行修改)
 ``` 
-cat /opt/components/salt_k8s/host.txt
+cat /opt/dendyops/components/salt_k8s/hosts.txt
 192.168.1.10  00:50:56:35:1e:c7  prometheus1.caojie.top
 192.168.1.11  00:50:56:33:44:e7  node1.caojie.top
 192.168.1.12  00:50:56:34:0a:c7  node2.caojie.top
@@ -16,13 +16,13 @@ cat /opt/components/salt_k8s/host.txt
 管理机（以下不做标记皆为admin 管理机）
 ```bash 
 #hosts文件生成
-/opt/components/utils/make_hosts.sh
+/opt/dendyops/components/utils/make_hosts.sh
 mv /etc/hosts{,.bak.$RANDOM} 
 cp /opt/hosts /etc/
 # 生成密钥
-/opt/components/ssh/ssh_key_gen.sh
+/opt/dendyops/components/ssh/ssh_key_gen.sh
 # 分发密钥
-/opt/components/ssh/fenfa_clinet_ssk.sh 123456
+/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh 123456
 
 
 ```
