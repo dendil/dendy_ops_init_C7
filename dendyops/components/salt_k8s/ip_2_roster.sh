@@ -11,12 +11,12 @@
 #  如果要去掉这个yes/no的询问环节，只需要修改本机的/etc/ssh/ssh_config
 #  文件中的"# StrictHostKeyChecking ask" 为 "StrictHostKeyChecking no"，然后重启sshd服务即可]
 #  sed -i 's/\#   StrictHostKeyChecking ask/StrictHostKeyChecking no/g'  /etc/ssh/ssh_config
-
-for Name in `/usr/bin/cat hosts.txt |grep -v ^# | awk '{print $2}'`
+hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
+for Name in `/usr/bin/cat $hostfile |grep -v ^# | awk '{print $2}'`
 do
-	Roster_hostname=`/usr/bin/cat hosts.txt  |grep -v ^#|grep   $Name | awk '{print $3}'`
-	Roster_ip=`/usr/bin/cat hosts.txt |grep -v ^# |grep   $Name | awk '{print $1}'`
-	#Roster_passwd=`/usr/bin/cat hosts.txt  |grep -v ^#|grep   $Name | awk '{print $8}'`
+	Roster_hostname=`/usr/bin/cat $hostfile  |grep -v ^#|grep   $Name | awk '{print $3}'`
+	Roster_ip=`/usr/bin/cat $hostfile |grep -v ^# |grep   $Name | awk '{print $1}'`
+	#Roster_passwd=`/usr/bin/cat $hostfile  |grep -v ^#|grep   $Name | awk '{print $8}'`
 	Roster_user="root"
 	Roster_port="22"
 echo "${Roster_hostname}:">>roster
