@@ -28,7 +28,25 @@ find . -name '*.sh' -exec chmod u+x {} \;
 sudo su
 bash  init.sh
 ```
+初始化项目
 
+ - 关闭selinux
+ - 关闭防火墙
+ - 安装本插件
+ - 添加sudo用户
+ - 更改sshd配置
+ - 扩大文件描述符
+ - 同步时间并启动时间同步服务chrony
+ - 配置国内阿里yum源 epel
+ - 安装工具　 lrzsz dos2unix ntp gcc bc rsync chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl bind-utils unzip mtr
+
+
+
+
+### Set New Hostname
+```bash
+/opt/components/utils/set_hostname.sh  <newhostname>
+```
 
 
 ### Use Aliyun Yum repo

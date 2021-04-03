@@ -93,7 +93,7 @@ function Msg(){
 ##### Close SElinux 关闭SElinux ##################################### 
 function selinux(){
     if [ ! -f /etc/selinux/_check_selinux ];then
-        if [ "`grep 'SELINUX=disabled' /etc/selinux/config |wc -l `" -eq 0 ];then
+        if [ "`grep 'SELINUX=disabled' /etc/selinux/config |wc -l `" -lt 1 ];then
             sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
             setenforce 0 >>/dev/null 2>&1
             echo "1" > /etc/selinux/_check_selinux
@@ -123,8 +123,13 @@ function HideVersion(){
 ##### Safe sshd   优化 sshd 服务#####################################
 function Safesshd(){
     sshd_file=/etc/ssh/sshd_config
+    if [ -f $1  ] && [ "$1" == "update" ];then
+        cp ssh/ssh*config /etc/ssh/
+        systemctl  restart  sshd >/dev/null 2>&1
+        Msg "sshd config  update .....ok!"
+    fi
     #if [ `grep "52112" $sshd_file|wc -l` -eq 0 ];then
-    if [ `grep "22" $sshd_file|wc -l` -eq 0 ];then
+    if [ `grep "22" $sshd_file|wc -l` -lt 1 ];then
         cp ssh/ssh*config /etc/ssh/
         systemctl  restart  sshd >/dev/null 2>&1
         Msg "sshd config .....ok!"
@@ -141,6 +146,7 @@ function Openfile(){
 }
 ##### hosts        同步hosts 文件 主机名#############################
 function hosts_hostname(){
+    local New_hostname=$1
     if [ `grep "$IP_addr $New_hostname" /etc/hosts |wc -l` -lt 1  ];then
         echo "$IP_addr $New_hostname"  >> /etc/hosts
     fi
@@ -469,7 +475,7 @@ function config_yum(){
     SOFT=""
     for soft in  lrzsz dos2unix ntp gcc bc rsync chrony vim wget bash-completion lrzsz nmap nc tree htop iftop net-tools python3  yum-utils curl bind-utils unzip mtr
     do
-        if [ "`rpm -qa $soft |wc -l`"  -eq 0 ] ;then
+        if [ "`rpm -qa $soft |wc -l`"  -lt 1 ] ;then
             SOFT=" $SOFT $soft "
         fi
     done
@@ -489,14 +495,28 @@ function set_default_target(){
 function bin_grep(){
     local string1=$1
     local string2=$2
-    if [ "`/bin/grep "/${string1}"  ${string2} |wc -l`" -eq 0 ];then
+    if [ "`/bin/grep "/${string1}"  ${string2} |wc -l`" -lt 1 ];then
         echo " ${string2} "  >> ${string2}
     fi
 }
 function install_ops(){
+    if [ -f $1  ] && [ "$1" == "update" ];then
+        if [ -d  /opt/dendyops ];then
+            rm -fr  /opt/dendyops
+            chmod u+x -R dendyops
+            cp -a dendyops /opt/
+            Msg 'update dendyops files'
+        fi
+        if [ -f  /etc/profile.d/dendyops_alias.sh  ];then
+            rm -fr /etc/profile.d/dendyops*.sh
+            cp profile.d/* /etc/profile.d/
+             Msg 'update dendyops_ profiles'
+        fi
+    fi
+    fi
     if [ ! -d  /opt/dendyops ];then
         chmod u+x -R dendyops
-        cp -a dendyops /usr/local
+        cp -a dendyops /opt/
     fi
     if [ ! -f  /etc/profile.d/dendyops_alias.sh  ];then
      cp profile.d/* /etc/profile.d/
@@ -506,47 +526,31 @@ function install_ops(){
 function add_sudoer(){
    
 
-     Msg 'set profile ok'
+    Msg 'set profile ok'
+    if [ -f $1  ] && [ "$1" == "update" ];then
+        if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
+            useradd dendy
+            echo 'QQwechat12345678990' | passwd dendy --stdin
+        else
+            echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
+        fi
+    fi
+    
 
-    if [  `cat /etc/passwd  |grep dendy|wc -l ` -eq 0 ];then
+    if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
 
 
     useradd dendy
     echo 'QQwechat12345678990' | passwd dendy --stdin
     fi
-    if [ `grep dendy /etc/sudoers |wc -l` -eq 0 ];then
+    if [ `grep dendy /etc/sudoers |wc -l` -lt 1 ];then
     chmod u+w /etc/sudoers
     echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
     chmod u-w /etc/sudoers
     fi
 }
 
-# 系统初始化
-function system_init(){
-    check_folder /opt
-    #check_folder /software
-    #check_folder /backup
-    #关闭selinux
-    selinux
-    # 关闭防火墙
-    close_iptables
-    #清除版本信息（安全操作） 一般不开启
-    #HideVersion
-    install_ops
-    add_sudoer
-    #安全化 ssh
-    Safesshd
-    # 扩大文件描述符
-    Openfile
-    #设置默认启动等级
-    set_default_target
-    #↓cron time
-    time_ntp
-    # 配置国内yum源
-    config_yum
-    # 开机启动项精简
-    #boot_centos7
-}
+
 function main(){
 
  # root 启动
@@ -569,11 +573,43 @@ function main(){
     check_sys 
  # 打印信息
     pre_installation_settings
-    system_init
+    check_folder /opt
+    #check_folder /software
+    #check_folder /backup
+    #关闭selinux
+    selinux
+    # 关闭防火墙
+    close_iptables
+    #清除版本信息（安全操作） 一般不开启
+    #HideVersion
+    if [ -f $1  ] && [ "$1" == "update" ];then
+    install_ops update
+    add_sudoer  update
+    Safesshd update
+    else
+    install_ops
+    add_sudoer
+    Safesshd
+    fi
+    #安全化 ssh
+    # 扩大文件描述符
+    Openfile
+    #设置默认启动等级
+    set_default_target
+    #↓cron time
+    time_ntp
+    # 配置国内yum源
+    config_yum
+    # 开机启动项精简
+    #boot_centos7
     shell_unlock
     Msg  "script end ,5s exit see log ${LOG_DIR}/${LOG_FILE}"
     sleep 5
 }
 ###没有开启 ip转发
-main
+if [ -f $1  ] && [ "$1" == "update" ];then
+    main  update
+else
+    main
+fi
 
