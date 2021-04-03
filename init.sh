@@ -13,7 +13,10 @@ LOG_FILE="auto_install.log"
 
 # 判断是否可以上网####################################################
 function test_ping(){
-    if [ ! -f /etc/selinux/_test_ping ];then
+    if [  -f /etc/selinux/_test_ping ];then 
+        Msg "test_ping() networking  is ok!"
+        
+    else
         ping -c 2 baidu.com >/dev/null
         if [ $? -eq 0 ];then
             Msg "test_ping() networking  is ok!"
@@ -23,8 +26,7 @@ function test_ping(){
             shell_unlock
             exit 1
         fi
-    else
-        Msg "test_ping() networking  is ok!"
+        
     fi
 }
 function get_base_path(){
@@ -122,7 +124,7 @@ function HideVersion(){
 ##### Safe sshd   优化 sshd 服务#####################################
 function Safesshd(){
     sshd_file=/etc/ssh/sshd_config
-    if [ -f $1  ] && [ "$1" == "update" ];then
+    if  [ "$1" == "update" ];then
         cp ssh/ssh*config /etc/ssh/
         systemctl  restart  sshd >/dev/null 2>&1
         Msg "sshd config  update .....ok!"
@@ -490,7 +492,7 @@ function bin_grep(){
     fi
 }
 function install_ops(){
-    if [ -f $1  ] && [ "$1" == "update" ];then
+    if [ "$1" == "update" ];then
         if [ -d  /opt/dendyops ];then
             rm -fr  /opt/dendyops
             chmod u+x -R dendyops
@@ -516,7 +518,7 @@ function add_sudoer(){
    
 
     Msg 'set profile ok'
-    if [ -f $1  ] && [ "$1" == "update" ];then
+    if [ "$1" == "update" ];then
         if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
             useradd dendy
             echo 'QQwechat12345678990' | passwd dendy --stdin
@@ -571,7 +573,7 @@ function main(){
     close_iptables
     #清除版本信息（安全操作） 一般不开启
     #HideVersion
-    if [ -f $1  ] && [ "$1" == "update" ];then
+    if [ "$1" == "update" ];then
     install_ops update
     add_sudoer  update
     Safesshd update
@@ -593,10 +595,11 @@ function main(){
     #boot_centos7
     shell_unlock
     Msg  "script end ,5s exit see log ${LOG_DIR}/${LOG_FILE}"
-    sleep 5
+    sleep 1
 }
 ###没有开启 ip转发
-if [ -f $1  ] && [ "$1" == "update" ];then
+UP=$1
+if [ "$UP" == "update" ];then
     main  update
 else
     main
