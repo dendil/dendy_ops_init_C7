@@ -20,8 +20,13 @@ fi
 passwd=$1
 hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
 if [ -f  $hostfile  ];then
-    for i in  `cat  $hostfile |grep -v ^# |awk '{print $3}'`
+    for i in  `cat  $hostfile |grep -v ^# |grep -v $HOSTNAME |awk '{print $3}'`
     do
         a_sub $i $passwd
      done
 fi
+if [ `grep "$(cat ~/.ssh/id_rsa.pub )" ~/.ssh/authorized_keys |wc -l ` -lt 1 ];then
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    
+fi
+action "$HOSTNAME" /bin/true

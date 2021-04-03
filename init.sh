@@ -473,7 +473,7 @@ function config_yum(){
       wget bash-completion lrzsz nmap  tree htop iftop \
       net-tools python3  yum-utils curl bind-utils unzip mtr"
     
-    yum install  $SOFT  -y >>/dev/null 2>&1
+    yum install  $SOFT  -y >>/dev/null 2>&1 &
     Msg "$SOFT installed"
 }
 function set_default_target(){

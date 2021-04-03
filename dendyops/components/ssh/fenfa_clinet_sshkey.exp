@@ -10,7 +10,7 @@ set password [lindex $argv 2]
 set timeout 10
 
 
-spawn ssh-copy-id -f -i $file  $host
+spawn ssh-copy-id  -i $file  $host
 expect {
         "*yes/no" {send "yes\r";exp_continue}
         "*password:" {send "$password\r"}
