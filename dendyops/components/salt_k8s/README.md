@@ -1,5 +1,6 @@
 # Salt-ssh自动化部署Kubernetes
 
+k8s_15  https://pan.baidu.com/s/1-ZxmZ0LFrGQJVPXQLu1apQ
 服务器节点(如需要请自行修改)
 ``` 
 cat /opt/dendyops/components/salt_k8s/hosts.txt
@@ -30,7 +31,17 @@ mv /etc/salt/roster{,.bak}
  cp /opt/roster  /etc/salt/
  #分发hosts
  salt-ssh  '*' cp.get_file /opt/hosts /etc/hosts
- 
+ salt-ssh  '*' cmd.run 'cat /etc/hosts'
+#安装dendyops
+#salt-ssh  '*' cmd.run 'ls /tmp/'
+ #如果有 则删掉
+#salt-ssh  '*' cmd.run 'rm -fr  /tmp/dendy_ops_init_C7'
+#同步内核文件
+salt-ssh  '*' cp.get_file /opt/dendyops/components/salt_k8s/sysctl.conf  /etc/sysctl.conf
+
+
+cp   -a  /opt/dendyops/components/salt_k8s/pillar /opt/
+cp 　-a  /opt/dendyops/components/salt_k8s/salt  /opt/
 ```
 
 ## Install Git

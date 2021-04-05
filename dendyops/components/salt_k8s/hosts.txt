@@ -1,4 +1,4 @@
-192.168.1.10  00:50:56:35:1e:c7  prometheus1.caojie.top
+192.168.1.10  00:50:56:35:1e:c7  master3.caojie.top
 192.168.1.11  00:50:56:33:44:e7  node1.caojie.top
 192.168.1.12  00:50:56:34:0a:c7  node2.caojie.top
 192.168.1.13  00:50:56:2e:34:67  node3.caojie.top
