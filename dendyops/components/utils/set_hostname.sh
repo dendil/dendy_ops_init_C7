@@ -8,11 +8,13 @@ if [[ "$IP" = "" ]]; then
 fi
 ##### hosts        同步hosts 文件 主机名#############################
 function hosts_hostname(){
-    local New_hostname=$1
-    if [ `grep "$IP_addr $New_hostname" /etc/hosts |wc -l` -lt 1  ];then
-        echo "$IP_addr $New_hostname"  >> /etc/hosts
+    if [ `grep $IP /etc/hosts  |wc -l` -eq 1  ];then
+        New_hostname=`grep $IP /etc/hosts |awk '{print $3}'`
+        hostnamectl set-hostname --static $New_hostname
+        echo" New hostname ==>  $New_hostname ...........ok!"
+    else
+        los=`grep $IP /etc/hosts`
+        echo "not found hostname ,found $los"
     fi
-    hostnamectl set-hostname --static $New_hostname
-    Msg " New hostname ==>  $New_hostname ...........ok!"
 }
-hosts_hostname $1
+hosts_hostname 

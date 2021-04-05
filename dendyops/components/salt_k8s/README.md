@@ -22,10 +22,17 @@ cp /opt/hosts /etc/
 # 生成密钥
 /opt/dendyops/components/ssh/ssh_key_gen.sh
 # 分发密钥
-/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh 123456
-
-
+/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/authorized_keys 123456
+#/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh /etc/salt/pki/master/ssh/salt-ssh.rsa.pub 123456
+# 生成 roster
+/opt/dendyops/components/salt_k8s/ip_2_roster.sh
+mv /etc/salt/roster{,.bak}
+ cp /opt/roster  /etc/salt/
+ #分发hosts
+ salt-ssh  '*' cp.get_file /opt/hosts /etc/hosts
+ 
 ```
+
 ## Install Git
 
 ```bash

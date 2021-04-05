@@ -108,6 +108,8 @@ function selinux(){
 function close_iptables(){
      #--关闭此服务
      systemctl disable firewalld.service >>  /dev/null  2>&1
+     systemctl stop postfix  >>  /dev/null  2>&1
+     systemctl disable postfix >>  /dev/null  2>&1
 
     #--关闭此服务
     systemctl stop firewalld.service >>  /dev/null  2>&1
@@ -471,7 +473,7 @@ function config_yum(){
     fi
     SOFT=" lrzsz dos2unix ntp gcc bc tcl  expect rsync chrony vim \
       wget bash-completion lrzsz nmap  tree htop iftop \
-      net-tools python3  yum-utils curl bind-utils unzip mtr"
+      net-tools python3  yum-utils curl bind-utils unzip mtr tailf "
     
     yum install  $SOFT  -y >>/dev/null 2>&1 &
     Msg "$SOFT installed"

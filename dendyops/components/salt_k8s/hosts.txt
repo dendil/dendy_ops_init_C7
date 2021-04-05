@@ -1,7 +1,7 @@
-192.168.1.10 00:50:56:35:1e:c7  prometheus1.caojie.top
-192.168.1.11 00:50:56:33:44:e7  node1.caojie.top
-192.168.1.12 00:50:56:34:0a:c7  node2.caojie.top
-192.168.1.13 00:50:56:2e:34:67  node3.caojie.top
-192.168.1.229 00:15:5d:ff:01:04 master1.caojie.top
-192.168.1.228 00:15:5d:ff:01:03 master2.caojie.top
+192.168.1.10  00:50:56:35:1e:c7  prometheus1.caojie.top
+192.168.1.11  00:50:56:33:44:e7  node1.caojie.top
+192.168.1.12  00:50:56:34:0a:c7  node2.caojie.top
+192.168.1.13  00:50:56:2e:34:67  node3.caojie.top
+192.168.1.229 00:15:5d:ff:01:04  master1.caojie.top
+192.168.1.228 00:15:5d:ff:01:03  master2.caojie.top
 192.168.1.5   00:50:56:2f:95:77  admin.caojie.top
