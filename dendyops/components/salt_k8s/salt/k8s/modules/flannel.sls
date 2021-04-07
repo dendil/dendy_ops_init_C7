@@ -6,7 +6,7 @@
 # Description:  Flannel
 #******************************************
 {% set flannel_version = "flannel-v0.10.0-linux-amd64" %}
-
+{% set etcd_version = "etcd-v3.3.1-linux-amd64" %}
 flannel-key:
   file.managed:
     - name: /opt/kubernetes/ssl/flanneld-csr.json
@@ -17,6 +17,14 @@ flannel-key:
   cmd.run:
     - name: cd /opt/kubernetes/ssl && /opt/kubernetes/bin/cfssl gencert -ca=/opt/kubernetes/ssl/ca.pem -ca-key=/opt/kubernetes/ssl/ca-key.pem -config=/opt/kubernetes/ssl/ca-config.json -profile=kubernetes flanneld-csr.json | /opt/kubernetes/bin/cfssljson -bare flanneld
     - unless: test -f /opt/kubernetes/ssl/flanneld.pem
+    
+flannel-etcdbin:
+  file.managed:
+    - name: /opt/kubernetes/bin/etcdctl
+    - source: salt://k8s/files/{{ etcd_version }}/etcdctl
+    - user: root
+    - group: root
+    - mode: 755
 
 remove-docker0:
   file.managed:

@@ -11,7 +11,7 @@ function hosts_hostname(){
     if [ `grep $IP /etc/hosts  |wc -l` -eq 1  ];then
         New_hostname=`grep $IP /etc/hosts |awk '{print $3}'`
         hostnamectl set-hostname --static $New_hostname
-        echo" New hostname ==>  $New_hostname ...........ok!"
+        echo " New hostname ==>  $New_hostname ...........ok!"
     else
         los=`grep $IP /etc/hosts`
         echo "not found hostname ,found $los"

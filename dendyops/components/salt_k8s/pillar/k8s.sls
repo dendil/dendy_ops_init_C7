@@ -12,8 +12,8 @@ MASTER_IP: "192.168.1.10,192.168.1.228,192.168.1.229"
 #设置ETCD集群访问地址（必须修改）
 ETCD_ENDPOINTS: "https://192.168.1.10:2379,https://192.168.1.228:2379,https://192.168.1.229:2379"
 
-#设置ETCD集群初始化列表（必须修改）
-ETCD_CLUSTER: "etcd-node1=https://192.168.1.10:2380,etcd-node2=https://192.168.1.228:2380,etcd-node3=https://192.168.1.229:2380"
+#设置ETCD集群初始化列表（必须修改） etcd-node1 2 3 的顺序必须跟roster 顺序一致
+ETCD_CLUSTER: "etcd-node1=https://192.168.1.229:2380,etcd-node2=https://192.168.1.228:2380,etcd-node3=https://192.168.1.10:2380"
 
 #通过Grains FQDN自动获取本机IP地址，请注意保证主机名解析到本机IP地址
 NODE_IP: {{ grains['fqdn_ip4'][0] }}

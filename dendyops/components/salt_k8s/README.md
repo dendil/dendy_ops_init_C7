@@ -4,13 +4,14 @@ k8s_15  https://pan.baidu.com/s/1-ZxmZ0LFrGQJVPXQLu1apQ
 服务器节点(如需要请自行修改)
 ``` 
 cat /opt/dendyops/components/salt_k8s/hosts.txt
-192.168.1.10  00:50:56:35:1e:c7  prometheus1.caojie.top
-192.168.1.11  00:50:56:33:44:e7  node1.caojie.top
-192.168.1.12  00:50:56:34:0a:c7  node2.caojie.top
-192.168.1.13  00:50:56:2e:34:67  node3.caojie.top
-192.168.1.229 00:15:5d:ff:01:04  master1.caojie.top
-192.168.1.228 00:15:5d:ff:01:03  master2.caojie.top
-192.168.1.5   00:50:56:2f:95:77  admin.caojie.top
+#     ip           mac                   hostname       k8s-role        etcd-role 
+192.168.1.10  00:50:56:35:1e:c7  master3.caojie.top     master          node3
+192.168.1.11  00:50:56:33:44:e7  node1.caojie.top       node            no
+192.168.1.12  00:50:56:34:0a:c7  node2.caojie.top       node            no
+192.168.1.13  00:50:56:2e:34:67  node3.caojie.top       node            no
+192.168.1.229 00:15:5d:ff:01:04  master1.caojie.top     master          node1
+192.168.1.228 00:15:5d:ff:01:03  master2.caojie.top     master          node2
+192.168.1.5   00:50:56:2f:95:77  admin.caojie.top       no              no
 ```
 
 # 设置部署节点到其它所有节点的SSH免密码登录（包括本机）
@@ -25,6 +26,10 @@ cp /opt/hosts /etc/
 # 分发密钥
 /opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/authorized_keys 123456
 #/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh /etc/salt/pki/master/ssh/salt-ssh.rsa.pub 123456
+
+
+
+
 # 生成 roster
 /opt/dendyops/components/salt_k8s/ip_2_roster.sh
 mv /etc/salt/roster{,.bak}
@@ -32,16 +37,37 @@ mv /etc/salt/roster{,.bak}
  #分发hosts
  salt-ssh  '*' cp.get_file /opt/hosts /etc/hosts
  salt-ssh  '*' cmd.run 'cat /etc/hosts'
+ #同步主机名
+ salt-ssh  '*' cp.get_file  /opt/dendyops/components/utils/set_hostname.sh  /tmp
+ salt-ssh  '*' cmd.run   'bash /tmp/set_hostname.sh'
+ salt-ssh  '*' cmd.run   'hostname'
+
+
 #安装dendyops
 #salt-ssh  '*' cmd.run 'ls /tmp/'
  #如果有 则删掉
 #salt-ssh  '*' cmd.run 'rm -fr  /tmp/dendy_ops_init_C7'
 #同步内核文件
 salt-ssh  '*' cp.get_file /opt/dendyops/components/salt_k8s/sysctl.conf  /etc/sysctl.conf
+salt-ssh  '*' cmd.run   'sysctl -p'
+#iptables透明网桥的实现
+# NOTE: kube-proxy 要求 NODE 节点操作系统中要具备 /sys/module/br_netfilter 文件，而且还要设置 bridge-nf-call-iptables=1，如果不满足要求，那么 kube-proxy 只是将检查信息记录到日志中，kube-proxy 仍然会正常运行，但是这样通过 Kube-proxy 设置的某些 iptables 规则就不会工作。# 如果看到
+#    sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-ip6tables: No such file or directory
+#    sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory
+#    sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-arptables: No such file or directory
+salt-ssh  '*' cmd.run 'modprobe br_netfilter'
+salt-ssh  '*' cmd.run   'sysctl -p'
 
+mv /etc/salt/master{,.bak}
+cp /opt/dendyops/components/salt_k8s/master   /etc/salt/
+cp    /opt/dendyops/components/salt_k8s/pillar /opt/
+cp 　  /opt/dendyops/components/salt_k8s/salt  /opt/
 
-cp   -a  /opt/dendyops/components/salt_k8s/pillar /opt/
-cp 　-a  /opt/dendyops/components/salt_k8s/salt  /opt/
+cd /opt/salt/k8s/
+# 下载并放入k8s_15  https://pan.baidu.com/s/1-ZxmZ0LFrGQJVPXQLu1apQ
+
+tar xf k8s-v1.15.2-auto.tar.gz
+ls files
 ```
 
 ## Install Git
