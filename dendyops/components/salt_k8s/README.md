@@ -36,6 +36,8 @@ cp /opt/hosts /etc/
 /opt/dendyops/components/ssh/ssh_key_gen.sh
 # 分发密钥
 /opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/id_rsa.pub 123456
+#测试
+/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh
 #/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh /etc/salt/pki/master/ssh/salt-ssh.rsa.pub 123456
 #安装saltstack salt-ssh
 /opt/dendyops/components/saltstack/install_salt_master.sh
