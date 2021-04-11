@@ -13,9 +13,10 @@ if [[ "$_route" = "" ]]; then
        exit 1
 fi
 ConfigNetworkIp(){
-	if [ -f  /etc/sysconfig/network-scripts/ifcfg-eth0 ] ; then
-       sed -i "s/ONBOOT=yes/ONBOOT=no/" /etc/sysconfig/network-scripts/ifcfg-eth0
-       mv /etc/sysconfig/network-scripts/ifcfg-eth0  /etc/sysconfig/network-scripts/ifcfg-eth0.$(date +%U%T)
+       cfgfile=`ls /etc/sysconfig/network-scripts/ifcfg-e* |grep -v '.bak'`
+	if [ -f  $cfgfile ] ; then
+       sed -i "s/ONBOOT=yes/ONBOOT=no/" $cfgfile
+       mv $cfgfile  $cfgfile.$(date +%U%T).bak
 cat > /etc/sysconfig/network-scripts/ifcfg-eth0 <<EOF
 DEVICE=eth0
 TYPE=Ethernet
