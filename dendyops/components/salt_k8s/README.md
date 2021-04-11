@@ -5,28 +5,40 @@ k8s_15  https://pan.baidu.com/s/1-ZxmZ0LFrGQJVPXQLu1apQ
 ``` 
 cat /opt/dendyops/components/salt_k8s/hosts.txt
 #     ip           mac                   hostname       k8s-role        etcd-role 
-192.168.1.10  00:50:56:35:1e:c7  master3.caojie.top     master          node3
-192.168.1.11  00:50:56:33:44:e7  node1.caojie.top       node            no
-192.168.1.12  00:50:56:34:0a:c7  node2.caojie.top       node            no
-192.168.1.13  00:50:56:2e:34:67  node3.caojie.top       node            no
-192.168.1.229 00:15:5d:ff:01:04  master1.caojie.top     master          node1
-192.168.1.228 00:15:5d:ff:01:03  master2.caojie.top     master          node2
-192.168.1.5   00:50:56:2f:95:77  admin.caojie.top       no              no
+192.168.1.7  	00:0c:29:36:5e:b0	node3.caojie.top         node            no
+192.168.1.8	    00:0c:29:e8:9f:cc	admin1.caojie.top         master             node3
+192.168.1.9	    00:0c:29:67:7a:09	node1.caojie.top         node             no
+192.168.1.11	00:0c:29:0f:44:8d	master1.caojie.top         master          node1
+192.168.1.13	00:0c:29:0d:43:83	master2.caojie.top         master           node2
+192.168.1.234	00:0c:29:f5:0f:67	node2.caojie.top         node             no
 ```
-
+# Salt SSH管理的机器以及角色分配
+k8s-role: 用来设置K8S的角色
+etcd-role: 用来设置etcd的角色，如果只需要部署一个etcd，只需要在一台机器上设置即可
+etcd-name: 如果对一台机器设置了etcd-role就必须设置etcd-name
+worker-role: 所有节点均为worker节点
+ca-file-role: 定义c8-node1为证书生成节点
+kubelet-bootstrap-role: 在c8-node1上生成kubelet-bootstrap的kubeconfig配置文件，然后再拷贝至各个节点
+kubelet-role: 所有的节点都需要安装kubelet
+calico-role: 在c8-node1的管理节点上安装并配置calico网络
 # 设置部署节点到其它所有节点的SSH免密码登录（包括本机）
 管理机（以下不做标记皆为admin 管理机）
 ```bash 
+# 安装dendyops
+cd /tmp && git clone https://github.com/dendil/dendy_ops_init_C7.git &&cd dendy_ops_init_C7 &&find . -name '*.sh' -exec chmod u+x {} \; &&bash init.sh update
 #hosts文件生成
 /opt/dendyops/components/utils/make_hosts.sh
 mv /etc/hosts{,.bak.$RANDOM} 
 cp /opt/hosts /etc/
+# 设置主机名
+/opt/dendyops/components/utils/set_hostname.sh
 # 生成密钥
 /opt/dendyops/components/ssh/ssh_key_gen.sh
 # 分发密钥
-/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/authorized_keys 123456
+/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/id_rsa.pub 123456
 #/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh /etc/salt/pki/master/ssh/salt-ssh.rsa.pub 123456
-
+#安装saltstack salt-ssh
+/opt/dendyops/components/saltstack/install_salt_master.sh
 
 
 

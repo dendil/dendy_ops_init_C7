@@ -27,6 +27,8 @@ echo "  user: ${Roster_user}">>/opt/roster
 echo "  priv: /root/.ssh/id_rsa">>/opt/roster
 echo "  minion_opts:">>/opt/roster
 echo "    grains:">>/opt/roster
+echo "      worker-role: node">>/opt/roster
+echo "      kubelet-role: node">>/opt/roster
 if [ `/usr/bin/cat $hostfile  |grep -v ^#|grep   $Name | awk '{print $4}'` == 'master' ];then
     echo "      k8s-role: master">>/opt/roster
 else
@@ -36,6 +38,11 @@ etcd=`/usr/bin/cat $hostfile  |grep -v ^#|grep   $Name | awk '{print $5}'`
 if [ ! "$etcd" == 'no' ];then
     echo "      etcd-role: node">>/opt/roster
     echo "      etcd-name: etcd-${etcd}">>/opt/roster
+	if [ "$etcd" == 'node1' ];then
+	    echo "      kubelet-bootstrap-role: admin">>/opt/roster
+	    echo "      ca-file-role: admin">>/opt/roster
+		echo "      calico-role: admin">>/opt/roster
+	fi
 fi
 done
 #if [ `/usr/bin/cat  /etc/ssh/ssh_config  |grep "StrictHostKeyChecking no" |wc -l` -eq 0 ];then

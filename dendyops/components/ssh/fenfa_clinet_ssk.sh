@@ -27,6 +27,7 @@ if [ -f  $hostfile  ];then
         a_sub $i  $sshfile  $passwd
      done
 fi
+touch ~/.ssh/authorized_keys
 if [ `grep "$(cat ~/.ssh/id_rsa.pub )" ~/.ssh/authorized_keys |wc -l ` -lt 1 ];then
     cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
     

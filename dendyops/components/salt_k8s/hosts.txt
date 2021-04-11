@@ -7,9 +7,9 @@
 #192.168.1.228 00:15:5d:ff:01:03  master2.caojie.top     master          node2
 #192.168.1.5   00:50:56:2f:95:77  admin.caojie.top       no              no
 #############################################################################↑ old
-192.168.1.7  	00:0c:29:36:5e:b0	node3.caojie.top         node            no
-192.168.1.8	    00:0c:29:e8:9f:cc	admin1.caojie.top         master             node3
+192.168.1.7  	00:0c:29:36:5e:b0	node3.caojie.top         node             no
+192.168.1.8	    00:0c:29:e8:9f:cc	admin1.caojie.top        master           node3
 192.168.1.9	    00:0c:29:67:7a:09	node1.caojie.top         node             no
-192.168.1.11	00:0c:29:0f:44:8d	master1.caojie.top         master          node1
-192.168.1.13	00:0c:29:0d:43:83	master2.caojie.top         master           node2
+192.168.1.11	00:0c:29:0f:44:8d	master1.caojie.top       master           node1
+192.168.1.13	00:0c:29:0d:43:83	master2.caojie.top       master           node2
 192.168.1.234	00:0c:29:f5:0f:67	node2.caojie.top         node             no
