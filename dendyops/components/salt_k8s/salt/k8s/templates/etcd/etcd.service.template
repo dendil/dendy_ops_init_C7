@@ -1,0 +1,28 @@
+[Unit]
+Description=Etcd Service
+Documentation=https://coreos.com/etcd/docs/latest/
+After=NetworkManager.target
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/etcd \
+  --auto-compaction-retention '1h' --max-request-bytes '33554432' --auto-compaction-mode 'periodic' --quota-backend-bytes '8589934592' \
+  --heartbeat-interval=250 \
+  --election-timeout=2000 \
+  --data-dir=/var/lib/etcd \
+  --wal-dir=/var/lib/etcd/wal \
+  --name={{ ETCD_NAME }} \
+  --listen-client-urls http://{{ NODE_IP }}:2379,http://127.0.0.1:2379 \
+  --listen-peer-urls http://{{ NODE_IP }}:2380 \
+  --initial-advertise-peer-urls http://{{ NODE_IP }}:2380 \
+  --advertise-client-urls http://{{ NODE_IP }}:2379 \
+  --initial-cluster-token etcd-k8s-cluster \
+  --initial-cluster "{{ ETCD_CLUSTER }}" \
+  --initial-cluster-state new
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+Alias=etcd3.service

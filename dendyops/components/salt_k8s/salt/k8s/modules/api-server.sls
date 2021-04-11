@@ -1,53 +1,102 @@
 # -*- coding: utf-8 -*-
 #******************************************
-# Author:       Long Zhang
-# Email:        392572435@qq.com
+# Author:       skymyyang
+# Email:        yang-li@live.cn
+# Organization: https://www.cnblogs.com/skymyyang/
 # Description:  Kubernetes API Server
 #******************************************
 
-{% set k8s_version = "k8s-v1.15.2" %}
+{% set k8s_version = "k8s-v1.18.2" %}
 
-kubernetes-csr-json:
+#定义审计日志目录
+audit-log-dir:
+  file.directory:
+    - name: /var/log/kubernetes
+#定义加密配置文件
+api-auth-encryption-config:
   file.managed:
-    - name: /opt/kubernetes/ssl/kubernetes-csr.json
-    - source: salt://k8s/templates/kube-api-server/kubernetes-csr.json.template
+    - name: /etc/kubernetes/pki/encryption-config.yaml
+    - source: salt://k8s/templates/kube-api-server/encryption-config.yaml.template
     - user: root
     - group: root
     - mode: 644
     - template: jinja
     - defaults:
-        NODE_IP: {{ pillar['NODE_IP'] }}
-        CLUSTER_KUBERNETES_SVC_IP: {{ pillar['CLUSTER_KUBERNETES_SVC_IP'] }}
-  cmd.run:
-    - name: cd /opt/kubernetes/ssl && /opt/kubernetes/bin/cfssl gencert -ca=/opt/kubernetes/ssl/ca.pem -ca-key=/opt/kubernetes/ssl/ca-key.pem -config=/opt/kubernetes/ssl/ca-config.json -profile=kubernetes kubernetes-csr.json | /opt/kubernetes/bin/cfssljson -bare kubernetes
-    - unless: test -f /opt/kubernetes/ssl/kubernetes.pem
-
-api-auth-token:
+        ENCRYPTION_KEY: {{ pillar['ENCRYPTION_KEY'] }}
+#审计策略文件
+kube-apiserver-audit-yaml:
   file.managed:
-    - name: /opt/kubernetes/ssl/bootstrap-token.csv
-    - source: salt://k8s/templates/kube-api-server/bootstrap_token.csv.template
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - defaults:
-        BOOTSTRAP_TOKEN: {{ pillar['BOOTSTRAP_TOKEN'] }}
-
-basic-auth:
-  file.managed:
-    - name: /opt/kubernetes/ssl/basic-auth.csv
-    - source: salt://k8s/templates/kube-api-server/basic-auth.csv.template
+    - name: /etc/kubernetes/audit-policy.yaml
+    - source: salt://k8s/templates/kube-api-server/audit-policy.yml.template
     - user: root
     - group: root
     - mode: 644
 
+#拷贝CA证书
+ca-pem-pki:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - name: /etc/kubernetes/pki/ca.pem
+    - source: salt://k8s/files/cert/ca.pem
+
+
+ca-key-pem-pki:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - name: /etc/kubernetes/pki/ca-key.pem
+    - source: salt://k8s/files/cert/ca-key.pem
+
+
+#拷贝apiserver-kubelet-client证书
+kube-apiserver-cert:
+    file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - name: /etc/kubernetes/pki/apiserver-kubelet-client.pem
+    - source: salt://k8s/files/cert/apiserver-kubelet-client.pem
+
+
+kube-apiserver-cert-key:
+    file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - name: /etc/kubernetes/pki/apiserver-kubelet-client-key.pem
+    - source: salt://k8s/files/cert/apiserver-kubelet-client-key.pem
+
+#拷贝metrics所使用的证书
+kubenetes-metrics-cert:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - name: /etc/kubernetes/pki/front-proxy-client.pem
+    - source: salt://k8s/files/cert/front-proxy-client.pem
+
+
+kubenetes-metrics-cert-key:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - name: /etc/kubernetes/pki/front-proxy-client-key.pem
+    - source: salt://k8s/files/cert/front-proxy-client-key.pem
+
+#拷贝kube-apiserver二进制文件
 kube-apiserver-bin:
   file.managed:
-    - name: /opt/kubernetes/bin/kube-apiserver
+    - name: /usr/local/bin/kube-apiserver
     - source: salt://k8s/files/{{ k8s_version }}/bin/kube-apiserver
     - user: root
     - group: root
     - mode: 755
+    - template: jinja
+
 
 kube-apiserver-service:
   file.managed:
@@ -62,15 +111,10 @@ kube-apiserver-service:
         SERVICE_CIDR: {{ pillar['SERVICE_CIDR'] }}
         NODE_PORT_RANGE: {{ pillar['NODE_PORT_RANGE'] }}
         ETCD_ENDPOINTS: {{ pillar['ETCD_ENDPOINTS'] }}
-  pkg.installed:
-    - names:
-      - ipvsadm
-      - ipset
-      - conntrack-tools
   cmd.run:
     - name: systemctl daemon-reload
   service.running:
-    - name: kube-apiserver 
+    - name: kube-apiserver
     - enable: True
     - watch:
       - file: kube-apiserver-service

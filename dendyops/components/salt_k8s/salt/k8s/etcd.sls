@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #******************************************
-# Author:       Jason Zhao
-# Email:        shundong.zhao@linuxhot.com
-# Organization: http://www.devopsedu.com/
+# Author:       iokubernetes
+# Email:        yang-li@live.cn
+# Organization: iokubernetes.github.io
 # Description:  ETCD Cluster
 #******************************************
 include:

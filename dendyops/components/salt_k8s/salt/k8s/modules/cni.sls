@@ -1,34 +1,27 @@
 # -*- coding: utf-8 -*-
 #******************************************
-# Author:       Jason Zhao
-# Email:        shundong.zhao@linuxhot.com
-# Organization: http://www.devopsedu.com/
+# Author:       iokubernetes
+# Email:        yang-li@live.cn
+# Organization: iokubernetes.github.io
 # Description:  CNI For Kubernetes
 #******************************************
-{% set cni_version = "cni-plugins-amd64-v0.7.0" %}
-
-cni-dir:
-  file.directory:
-    - name: /etc/cni
+{% set cni_version = "cni-plugins-linux-amd64-v0.8.6" %}
 
 cni-dir-net:
   file.directory:
     - name: /etc/cni/net.d
+    - makedirs: True
 
-cni-default-conf:
-  file.managed:
-    - name: /etc/cni/net.d/10-default.conf
-    - source: salt://k8s/templates/cni/10-default.conf.template
-    - user: root
-    - group: root
-    - mode: 644
-    - template: jinja
-    - defaults:
-        POD_CIDR: {{ pillar['POD_CIDR'] }}
+
+cni-bin-dir:
+  file.directory:
+    - name: /opt/cni/bin
+    - makedirs: True
+
 
 cni-bin:
   file.recurse:
-    - name: /opt/kubernetes/bin/cni
+    - name: /opt/cni/bin
     - source: salt://k8s/files/{{ cni_version }}/
     - user: root
     - group: root

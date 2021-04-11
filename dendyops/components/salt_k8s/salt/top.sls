@@ -1,19 +1,30 @@
 # -*- coding: utf-8 -*-
 #******************************************
-# Author:       Jason Zhao
-# Email:        shundong.zhao@linuxhot.com
-# Organization: http://www.devopsedu.com/
-# Description:  SaltStack Top File
+# Author:       skymyyang
+# Email:        yang-li@live.cn
+# Organization: https://www.cnblogs.com/skymyyang/
+# Description:  Kubernetes Master
 #******************************************
 
 base:
-  'k8s-role:master':
+  'worker-role: node':
     - match: grain
-    - k8s.master
-  'k8s-role:node':
-    - match: grain
-    - k8s.node
+    - k8s.baseset
   'etcd-role:node':
     - match: grain
     - k8s.etcd
-
+  'ca-file-role: admin':
+    - match: grain
+    - k8s.modules.ca-file-generate
+  'k8s-role:master':
+    - match: grain
+    - k8s.master
+  'kubelet-bootstrap-role: admin':
+    - match: grain
+    - k8s.modules.kubelet-bootstrap-kubeconfig
+  'kubelet-role: node':
+    - match: grain
+    - k8s.node
+  'calico-role:admin':
+    - match: grain
+    - k8s.modules.calico

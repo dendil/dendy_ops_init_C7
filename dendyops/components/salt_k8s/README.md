@@ -53,12 +53,12 @@ cp /opt/hosts /etc/
 mv /etc/salt/roster{,.bak}
  cp /opt/roster  /etc/salt/
  #分发hosts
-  /opt/dendyops/components/ssh/fenfa_client_file.sh   /opt/hosts  /etc/hosts
+#/opt/dendyops/components/ssh/fenfa_client_file.sh   /opt/hosts  /etc/hosts
  salt-ssh  '*' cp.get_file /opt/hosts /etc/hosts
  salt-ssh  '*' cmd.run 'cat /etc/hosts'
  #同步主机名
- /opt/dendyops/components/ssh/fenfa_client_file.sh    /opt/dendyops/components/utils/set_hostname.sh  /tmp 
-/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh 'bash /tmp/set_hostname.sh'
+#/opt/dendyops/components/ssh/fenfa_client_file.sh    /opt/dendyops/components/utils/set_hostname.sh  /tmp 
+#/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh 'bash /tmp/set_hostname.sh'
  salt-ssh  '*' cp.get_file  /opt/dendyops/components/utils/set_hostname.sh  /tmp
  salt-ssh  '*' cmd.run   'bash /tmp/set_hostname.sh'
  salt-ssh  '*' cmd.run   'hostname'

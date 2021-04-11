@@ -13,7 +13,7 @@
 #  sed -i 's/\#   StrictHostKeyChecking ask/StrictHostKeyChecking no/g'  /etc/ssh/ssh_config
 hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
 
-for Name in `/usr/bin/cat $hostfile |grep -v ^# |grep -v admin| awk '{print $2}'`
+for Name in `/usr/bin/cat $hostfile |grep -v ^# | awk '{print $2}'`
 do
 	Roster_hostname=`/usr/bin/cat $hostfile  |grep -v ^#|grep   $Name | awk '{print $3}'`
 	Roster_ip=`/usr/bin/cat $hostfile |grep -v ^# |grep   $Name | awk '{print $1}'`
