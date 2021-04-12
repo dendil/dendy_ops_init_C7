@@ -17,8 +17,8 @@ MASTER_H3: "admin1.caojie.top"
 
 #KUBE-APISERVER的反向代理地址端口
 #KUBE_APISERVER: "https://127.0.0.1:8443"
-KUBE_APISERVER: "https://server.k8s.local:8443"
-KUBE_APISERVER_DNS_NAME: "server.k8s.local"
+KUBE_APISERVER: "https://localhost:8443"
+KUBE_APISERVER_DNS_NAME: "localhost"
 
 #设置ETCD集群访问地址（必须修改）
 ETCD_ENDPOINTS: "http://192.168.1.11:2380,http://192.168.1.13:2380,http://192.168.1.8:2380"

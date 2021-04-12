@@ -22,7 +22,7 @@ sslcert-config-dir:
     - makedirs: True
 srv-salt-cert-dir:
   file.directory:
-    - name: /srv/salt/k8s/files/cert
+    - name: /opt/salt/k8s/files/cert
     - makedirs: True
 
 ca-config-json:
@@ -42,8 +42,8 @@ ca-csr-json:
 #制作ca证书以及key
 ca-pem-key-pki:
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -initca ca-csr.json | cfssljson -bare ca && /bin/cp /etc/kubernetes/sslcert/ca.pem /srv/salt/k8s/files/cert/ca.pem && /bin/cp /etc/kubernetes/sslcert/ca-key.pem /srv/salt/k8s/files/cert/ca-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/ca-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -initca ca-csr.json | cfssljson -bare ca && /bin/cp /etc/kubernetes/sslcert/ca.pem /opt/salt/k8s/files/cert/ca.pem && /bin/cp /etc/kubernetes/sslcert/ca-key.pem /opt/salt/k8s/files/cert/ca-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/ca-key.pem
 
 #此时会生成ca.pem ca-key.pem ca.csr三个文件
 #制作kubectl所需证书以及私钥   定义证书签名请求,以及生成证书
@@ -55,8 +55,8 @@ admin-csr-json:
     - group: root
     - mode: 644
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=/etc/kubernetes/sslcert/ca.pem -ca-key=/etc/kubernetes/sslcert/ca-key.pem -config=/etc/kubernetes/sslcert/ca-config.json -profile=kubernetes admin-csr.json | cfssljson -bare admin && /bin/cp /etc/kubernetes/sslcert/admin.pem /srv/salt/k8s/files/cert/admin.pem && /bin/cp /etc/kubernetes/sslcert/admin-key.pem /srv/salt/k8s/files/cert/admin-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/admin-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=/etc/kubernetes/sslcert/ca.pem -ca-key=/etc/kubernetes/sslcert/ca-key.pem -config=/etc/kubernetes/sslcert/ca-config.json -profile=kubernetes admin-csr.json | cfssljson -bare admin && /bin/cp /etc/kubernetes/sslcert/admin.pem /opt/salt/k8s/files/cert/admin.pem && /bin/cp /etc/kubernetes/sslcert/admin-key.pem /opt/salt/k8s/files/cert/admin-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/admin-key.pem
 
 #生成kubectl配置文件-这里将不再需要kubectl.sls文件
 kubectl-admin-set-cluster:
@@ -103,8 +103,8 @@ kube-api-server-csr-json:
         KUBE_APISERVER_DNS_NAME: {{ pillar['KUBE_APISERVER_DNS_NAME'] }}
         CLUSTER_KUBERNETES_SVC_IP: {{ pillar['CLUSTER_KUBERNETES_SVC_IP'] }}
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kubernetes-csr.json | cfssljson -bare apiserver-kubelet-client && /bin/cp /etc/kubernetes/sslcert/apiserver-kubelet-client.pem /srv/salt/k8s/files/cert/apiserver-kubelet-client.pem && /bin/cp /etc/kubernetes/sslcert/apiserver-kubelet-client-key.pem /srv/salt/k8s/files/cert/apiserver-kubelet-client-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/apiserver-kubelet-client-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kubernetes-csr.json | cfssljson -bare apiserver-kubelet-client && /bin/cp /etc/kubernetes/sslcert/apiserver-kubelet-client.pem /opt/salt/k8s/files/cert/apiserver-kubelet-client.pem && /bin/cp /etc/kubernetes/sslcert/apiserver-kubelet-client-key.pem /opt/salt/k8s/files/cert/apiserver-kubelet-client-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/apiserver-kubelet-client-key.pem
 
 
 
@@ -120,8 +120,8 @@ front-proxy-client-csr-json:
     - mode: 644
     - template: jinja
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes front-proxy-client-csr.json | cfssljson -bare front-proxy-client && /bin/cp /etc/kubernetes/sslcert/front-proxy-client.pem /srv/salt/k8s/files/cert/front-proxy-client.pem && /bin/cp /etc/kubernetes/sslcert/front-proxy-client-key.pem /srv/salt/k8s/files/cert/front-proxy-client-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/front-proxy-client-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes front-proxy-client-csr.json | cfssljson -bare front-proxy-client && /bin/cp /etc/kubernetes/sslcert/front-proxy-client.pem /opt/salt/k8s/files/cert/front-proxy-client.pem && /bin/cp /etc/kubernetes/sslcert/front-proxy-client-key.pem /opt/salt/k8s/files/cert/front-proxy-client-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/front-proxy-client-key.pem
 
 
 
@@ -143,8 +143,8 @@ kube-controller-manager-csr-json:
         MASTER_H3: {{ pillar['MASTER_H3'] }}
         KUBE_APISERVER_DNS_NAME: {{ pillar['KUBE_APISERVER_DNS_NAME'] }}
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager && /bin/cp /etc/kubernetes/sslcert/kube-controller-manager.pem /srv/salt/k8s/files/cert/kube-controller-manager.pem && /bin/cp /etc/kubernetes/sslcert/kube-controller-manager-key.pem /srv/salt/k8s/files/cert/kube-controller-manager-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/kube-controller-manager-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager && /bin/cp /etc/kubernetes/sslcert/kube-controller-manager.pem /opt/salt/k8s/files/cert/kube-controller-manager.pem && /bin/cp /etc/kubernetes/sslcert/kube-controller-manager-key.pem /opt/salt/k8s/files/cert/kube-controller-manager-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/kube-controller-manager-key.pem
 
 
 
@@ -170,7 +170,7 @@ kubectl-controller-manager-use:
     - user: root
     - group: root
     - mode: 644
-    - name: /srv/salt/k8s/files/cert/controller-manager.conf
+    - name: /opt/salt/k8s/files/cert/controller-manager.conf
     - source: /etc/kubernetes/sslcert/kube-controller-manager.kubeconfig
     - force: True
 
@@ -192,8 +192,8 @@ kube-scheduler-csr-json:
         MASTER_H3: {{ pillar['MASTER_H3'] }}
         KUBE_APISERVER_DNS_NAME: {{ pillar['KUBE_APISERVER_DNS_NAME'] }}
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-scheduler-csr.json | cfssljson -bare kube-scheduler && /bin/cp /etc/kubernetes/sslcert/kube-scheduler.pem /srv/salt/k8s/files/cert/kube-scheduler.pem && /bin/cp /etc/kubernetes/sslcert/kube-scheduler-key.pem /srv/salt/k8s/files/cert/kube-scheduler-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/kube-scheduler-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-scheduler-csr.json | cfssljson -bare kube-scheduler && /bin/cp /etc/kubernetes/sslcert/kube-scheduler.pem /opt/salt/k8s/files/cert/kube-scheduler.pem && /bin/cp /etc/kubernetes/sslcert/kube-scheduler-key.pem /opt/salt/k8s/files/cert/kube-scheduler-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/kube-scheduler-key.pem
 
 
 #创建和分发 kube-scheduler的kubeconfig 文件;kube-scheduler 使用 kubeconfig 文件访问 apiserver，
@@ -217,7 +217,7 @@ kubectl-scheduler-use:
     - user: root
     - group: root
     - mode: 644
-    - name: /srv/salt/k8s/files/cert/scheduler.conf
+    - name: /opt/salt/k8s/files/cert/scheduler.conf
     - source: /etc/kubernetes/sslcert/kube-scheduler.kubeconfig
     - force: True
 
@@ -231,8 +231,8 @@ kube-proxy-csr-json:
     - group: root
     - mode: 644
   cmd.run:
-    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes  kube-proxy-csr.json | cfssljson -bare kube-proxy && /bin/cp /etc/kubernetes/sslcert/kube-proxy.pem /srv/salt/k8s/files/cert/kube-proxy.pem && /bin/cp /etc/kubernetes/sslcert/kube-proxy-key.pem /srv/salt/k8s/files/cert/kube-proxy-key.pem
-    - unless: test -f /srv/salt/k8s/files/cert/kube-proxy-key.pem
+    - name: cd /etc/kubernetes/sslcert && cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes  kube-proxy-csr.json | cfssljson -bare kube-proxy && /bin/cp /etc/kubernetes/sslcert/kube-proxy.pem /opt/salt/k8s/files/cert/kube-proxy.pem && /bin/cp /etc/kubernetes/sslcert/kube-proxy-key.pem /opt/salt/k8s/files/cert/kube-proxy-key.pem
+    - unless: test -f /opt/salt/k8s/files/cert/kube-proxy-key.pem
 
 
 
@@ -256,7 +256,7 @@ kubeproxy-use:
     - user: root
     - group: root
     - mode: 644
-    - name: /srv/salt/k8s/files/cert/proxy.config
+    - name: /opt/salt/k8s/files/cert/proxy.config
     - source: /etc/kubernetes/sslcert/kube-proxy.kubeconfig
     - force: True
 

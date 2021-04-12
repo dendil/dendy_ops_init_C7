@@ -87,8 +87,37 @@ cp     -a /opt/dendyops/components/salt_k8s/salt  /opt/
 cd /opt/salt/k8s/
 # 下载并放入k8s_15  https://pan.baidu.com/s/1-ZxmZ0LFrGQJVPXQLu1apQ
 
-tar xf k8s-v1.15.2-auto.tar.gz
-ls files
+mkdir /opt/salt/k8s/files -p
+cd /opt/salt/k8s/files 
+mkdir cfssl 
+cd cfssl 
+wget https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64
+
+wget https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64
+
+wget https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl-certinfo_1.4.1_linux_amd64
+cd ..
+
+
+wget https://github.com/coreos/etcd/releases/download/v3.4.9/etcd-v3.4.9-linux-amd64.tar.gz
+
+tar xf etcd-v3.4.9-linux-amd64.tar.gz
+mkdir cni-plugins-linux-amd64-v0.8.6
+cd cni-plugins-linux-amd64-v0.8.6
+wget  https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni-plugins-linux-amd64-v0.8.6.tgz
+tar xf cni-plugins-linux-amd64-v0.8.6.tgz
+
+cd ..
+wget https://storage.googleapis.com/kubernetes-release/release/v1.18.2/kubernetes-server-linux-amd64.tar.gz 
+# 虚拟机快照
+
+salt-ssh '*' test.ping
+salt-ssh  '*' state.sls k8s.baseset
+salt-ssh -L 'master1.caojie.top,master2.caojie.top,admin1.caojie.top' state.sls k8s.etcd
+salt-ssh  'admin1*' state.sls k8s.modules.ca-file-generate
+salt-ssh -L 'master1.caojie.top,master2.caojie.top,admin1.caojie.top' state.sls k8s.master
+salt-ssh -L 'admin1.caojie.top' state.sls k8s.modules.kubelet-bootstrap-kubeconfig
+
 ```
 
 ## Install Git

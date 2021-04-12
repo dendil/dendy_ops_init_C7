@@ -2,11 +2,11 @@
 Description=Etcd Service
 Documentation=https://coreos.com/etcd/docs/latest/
 After=NetworkManager.target
-
+#--max-request-bytes '33554432' --auto-compaction-mode 'periodic' --quota-backend-bytes '8589934592'
 [Service]
 Type=notify
 ExecStart=/usr/local/bin/etcd \
-  --auto-compaction-retention '1h' --max-request-bytes '33554432' --auto-compaction-mode 'periodic' --quota-backend-bytes '8589934592' \
+  --auto-compaction-retention '1h'  \
   --heartbeat-interval=250 \
   --election-timeout=2000 \
   --data-dir=/var/lib/etcd \

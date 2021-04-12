@@ -38,7 +38,7 @@ etcd=`/usr/bin/cat $hostfile  |grep -v ^#|grep   $Name | awk '{print $5}'`
 if [ ! "$etcd" == 'no' ];then
     echo "      etcd-role: node">>/opt/roster
     echo "      etcd-name: etcd-${etcd}">>/opt/roster
-	if [ "$etcd" == 'node1' ];then
+	if [ "$etcd" == 'node3' ];then
 	    echo "      kubelet-bootstrap-role: admin">>/opt/roster
 	    echo "      ca-file-role: admin">>/opt/roster
 		echo "      calico-role: admin">>/opt/roster

@@ -24,7 +24,7 @@ kubelet-bootstrap-kubeconfig-cp:
     - user: root
     - group: root
     - mode: 644
-    - name: /srv/salt/k8s/files/cert/bootstrap-kubelet.conf
+    - name: /opt/salt/k8s/files/cert/bootstrap-kubelet.conf
     - source: /etc/kubernetes/sslcert/bootstrap.kubeconfig
     - force: True
 
