@@ -80,9 +80,9 @@ salt-ssh  '*' cmd.run 'modprobe br_netfilter'
 salt-ssh  '*' cmd.run   'sysctl -p'
 
 mv /etc/salt/master{,.bak}
-cp /opt/dendyops/components/salt_k8s/master   /etc/salt/
-cp    /opt/dendyops/components/salt_k8s/pillar /opt/
-cp 　  /opt/dendyops/components/salt_k8s/salt  /opt/
+cp      /opt/dendyops/components/salt_k8s/master   /etc/salt/
+cp     -a /opt/dendyops/components/salt_k8s/pillar /opt/
+cp     -a /opt/dendyops/components/salt_k8s/salt  /opt/
 
 cd /opt/salt/k8s/
 # 下载并放入k8s_15  https://pan.baidu.com/s/1-ZxmZ0LFrGQJVPXQLu1apQ
