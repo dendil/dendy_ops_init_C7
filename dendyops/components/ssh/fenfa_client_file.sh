@@ -5,15 +5,15 @@ if [ $# -ne 2 ]
 	echo "$0 file dir"
 	exit 1
 fi
-filename=`basename $1`
+filename=`basename $2`
 
-hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
+hostfile=$1
 if [ -f  $hostfile  ];then
 for i in  `cat  $hostfile|grep -v ^# |grep -v $HOSTNAME |awk '{print $3}'`
 do
 	#ip=`echo $i|awk -F@ '{print $1}'`
 	ip=$i
-	rsync -avzP $1 -e 'ssh -t -p 22 ' root@$ip:$2
+	rsync -avzP $2 -e 'ssh -t -p 22 ' root@$ip:$3
 	#ssh -t -p 22 root@$ip sudo rsync ~/$filename $2
 	if [ $? -eq 0 ]
 		then

@@ -27,7 +27,7 @@ calico-role: 在c8-node1的管理节点上安装并配置calico网络
 # 安装dendyops
 cd /tmp && git clone https://github.com/dendil/dendy_ops_init_C7.git &&cd dendy_ops_init_C7 &&find . -name '*.sh' -exec chmod u+x {} \; &&bash init.sh update
 #hosts文件生成
-/opt/dendyops/components/utils/make_hosts.sh
+/opt/dendyops/components/utils/make_hosts.sh /opt/dendyops/components/salt_k8s/hosts.txt
 mv /etc/hosts{,.bak.$RANDOM} 
 cp /opt/hosts /etc/
 # 设置主机名
@@ -35,9 +35,9 @@ cp /opt/hosts /etc/
 # 生成密钥
 /opt/dendyops/components/ssh/ssh_key_gen.sh
 # 分发密钥
-/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/id_rsa.pub 123456
+/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh ~/.ssh/id_rsa.pub 123456 /opt/dendyops/components/salt_k8s/hosts.txt
 #测试
-/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh hostname
+/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh /opt/dendyops/components/salt_k8s/hosts.txt hostname
 #初始化子节点
 /opt/dendyops/components/ssh/fenfa_client_file.sh    /tmp/dendy_ops_init_C7 /tmp/
 /opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh  'bash /tmp/dendy_ops_init_C7/init.sh update'
@@ -114,10 +114,12 @@ wget https://storage.googleapis.com/kubernetes-release/release/v1.18.2/kubernete
 salt-ssh '*' test.ping
 salt-ssh  '*' state.sls k8s.baseset
 salt-ssh -L 'master1.caojie.top,master2.caojie.top,admin1.caojie.top' state.sls k8s.etcd
+etcdctl endpoint status --cluster -w table
 salt-ssh  'admin1*' state.sls k8s.modules.ca-file-generate
 salt-ssh -L 'master1.caojie.top,master2.caojie.top,admin1.caojie.top' state.sls k8s.master
 salt-ssh -L 'admin1.caojie.top' state.sls k8s.modules.kubelet-bootstrap-kubeconfig
-
+salt-ssh '*' state.sls k8s.node
+salt-ssh  'admin1*' state.sls k8s.modules.calico
 ```
 
 ## Install Git

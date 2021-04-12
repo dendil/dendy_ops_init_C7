@@ -20,7 +20,8 @@ if [   -z $1 ];then
 fi
 passwd=$2
 sshfile=$1
-hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
+hostfile=$3
+#hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
 if [ -f  $hostfile  ];then
     for i in  `cat  $hostfile |grep -v ^# |grep -v $HOSTNAME |awk '{print $3}'`
     do

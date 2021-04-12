@@ -1,6 +1,6 @@
 #!/bin/bash
 . /etc/init.d/functions
-Comman=`echo "$1"|awk '{print $1}'`
+Comman=`echo "$2"|awk '{print $1}'`
 Command=`which $Comman`
 Options=`echo "$*"|awk -F"$Comman" '{print $2}'`
 a_sub() {
@@ -15,7 +15,7 @@ a_sub() {
                         action "$i" /bin/false
                 fi
 }
-hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
+hostfile=$1
 if [ -f  $hostfile  ];then
 tmp_fifofile="/tmp/$.fifo"
 mkfifo $tmp_fifofile      # 新建一个fifo类型的文件

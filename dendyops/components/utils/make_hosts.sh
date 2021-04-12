@@ -1,5 +1,6 @@
 #!/bin/bash
-hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
+hostfile=$1
+#hostfile=/opt/dendyops/components/salt_k8s/hosts.txt
 if [ -f /opt/hosts ];then
     mv  /opt/hosts{,.bak.$RANDOM}
 fi
