@@ -39,8 +39,8 @@ cp /opt/hosts /etc/
 #测试
 /opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh /opt/dendyops/components/salt_k8s/hosts.txt hostname
 #初始化子节点
-/opt/dendyops/components/ssh/fenfa_client_file.sh    /tmp/dendy_ops_init_C7 /tmp/
-/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh  'bash /tmp/dendy_ops_init_C7/init.sh update'
+/opt/dendyops/components/ssh/fenfa_client_file.sh    /opt/dendyops/components/salt_k8s/hosts.txt /tmp/dendy_ops_init_C7 /tmp/
+/opt/dendyops/components/ssh/fenfa_clinet_ssk_test.sh  /opt/dendyops/components/salt_k8s/hosts.txt 'bash /tmp/dendy_ops_init_C7/init.sh update'
 
 #/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh /etc/salt/pki/master/ssh/salt-ssh.rsa.pub 123456
 #安装saltstack salt-ssh

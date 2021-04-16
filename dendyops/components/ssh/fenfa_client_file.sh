@@ -1,6 +1,6 @@
 #!/bin/bash
 . /etc/init.d/functions
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
 	then
 	echo "$0 file dir"
 	exit 1
