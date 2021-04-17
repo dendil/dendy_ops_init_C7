@@ -44,12 +44,12 @@ cp /opt/hosts /etc/
 
 #/opt/dendyops/components/ssh/fenfa_clinet_ssk.sh /etc/salt/pki/master/ssh/salt-ssh.rsa.pub 123456
 #安装saltstack salt-ssh
-/opt/dendyops/components/saltstack/install_salt_master.sh
+/opt/dendyops/components/saltstack/install_salt_master.sh  
 
 
 
 # 生成 roster
-/opt/dendyops/components/salt_k8s/ip_2_roster.sh
+/opt/dendyops/components/salt_k8s/ip_2_roster.sh /opt/dendyops/components/salt_k8s/hosts.txt
 mv /etc/salt/roster{,.bak}
  cp /opt/roster  /etc/salt/
  #分发hosts

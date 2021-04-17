@@ -45,11 +45,11 @@ bash  init.sh
 
 ## Set New Hostname
 ```bash
-/opt/components/utils/set_hostname.sh  <newhostname>
+/opt/dendyops/components/utils/set_hostname.sh  <newhostname>
 ```
 ### Install salt-master  salt-ssh 
 ```bash
-/opt/components/saltstack/install_salt_master.sh
+/opt/dendyops/components/saltstack/install_salt_master.sh
 
 ```
 
@@ -57,14 +57,14 @@ bash  init.sh
 
 ### Install salt-minion
 ```bash
-/opt/components/saltstack/install_salt_minion.sh
+/opt/dendyops/components/saltstack/install_salt_minion.sh
 
 ```
 
 ### Use Aliyun Yum repo
 
 ```bash
-/opt/components/aliyun/use_aliyun_yum_repo.sh
+/opt/dendyops/components/aliyun/use_aliyun_yum_repo.sh
 ```
 
 
@@ -74,13 +74,13 @@ bash  init.sh
 Install some basic tools, e.g. wget, vim, etc.
 
 ```bash
-/opt/components/tools/install_tools.sh
+/opt/dendyops/components/tools/install_tools.sh
 ```
 
 ## Increase ulimit
 
 ```bash
-/opt/components/utils/increase_ulimit.sh
+/opt/dendyops/components/utils/increase_ulimit.sh
 ```
 
 
@@ -89,10 +89,10 @@ Install some basic tools, e.g. wget, vim, etc.
 
 ```bash
 # Recommend to set ntp time sync with chrony
-/opt/components/timedate/sync_timedate_chrony.sh
+/opt/dendyops/components/timedate/sync_timedate_chrony.sh
 
 # Or set ntp time sync with ntp
-/opt/components/timedate/sync_timedate_ntp.sh
+/opt/dendyops/components/timedate/sync_timedate_ntp.sh
 ```
 
 
@@ -102,7 +102,7 @@ Install some basic tools, e.g. wget, vim, etc.
 Install OpenJDK8:
 
 ```bash
-/opt/components/openjdk/install_openjdk8.sh
+/opt/dendyops/components/openjdk/install_openjdk8.sh
 ```
 
 ### Install Jenkins
@@ -112,7 +112,7 @@ Install OpenJDK8:
 Install Jenkins by Jenkins Yum repo:
 
 ```bash
-/opt/components/jenkins/install_jenkins.sh
+/opt/dendyops/components/jenkins/install_jenkins.sh
 ```
 
 
@@ -120,7 +120,7 @@ Install Jenkins by Jenkins Yum repo:
 Or install Jenkins by Jenkins mirror:
 
 ```bash
-/opt/components/jenkins/install_jenkins_rpm.sh
+/opt/dendyops/components/jenkins/install_jenkins_rpm.sh
 ```
 
 
@@ -131,11 +131,11 @@ Or install Jenkins by Jenkins mirror:
 
 ```bash
 # Install default Gradle (Gradle5.4)
-/opt/components/gradle/install_gradle.sh
+/opt/dendyops/components/gradle/install_gradle.sh
 
 # Install specific Gradle version
-# Example: /opt/components/gradle/install_gradle.sh 4.6
-/opt/components/gradle/install_gradle.sh <version>
+# Example: /opt/dendyops/components/gradle/install_gradle.sh 4.6
+/opt/dendyops/components/gradle/install_gradle.sh <version>
 ```
 
 
@@ -144,11 +144,11 @@ Or install Jenkins by Jenkins mirror:
 
 ```bash
 # Install default Maven (Maven3.6.0)
-/opt/components/maven/install_maven.sh
+/opt/dendyops/components/maven/install_maven.sh
 
 # Install specific Maven version
-# /opt/components/maven/install_maven.sh 3.5.0
-/opt/components/maven/install_maven.sh <version>
+# /opt/dendyops/components/maven/install_maven.sh 3.5.0
+/opt/dendyops/components/maven/install_maven.sh <version>
 ```
 
 
@@ -158,8 +158,8 @@ Or install Jenkins by Jenkins mirror:
 Install GitLab CE with HTTP:
 
 ```bash
-# /opt/components/gitlab/install_gitlab_ce_http.sh gitlab.xdevops.cn
-/opt/components/gitlab/install_gitlab_ce_http.sh <gitlab_domain>
+# /opt/dendyops/components/gitlab/install_gitlab_ce_http.sh gitlab.xdevops.cn
+/opt/dendyops/components/gitlab/install_gitlab_ce_http.sh <gitlab_domain>
 ```
 
 
@@ -167,8 +167,8 @@ Install GitLab CE with HTTP:
 Install GitLab CE with HTTPS using manual SSL cert:
 
 ```bash
-# /opt/components/gitlab/install_gitlab_ce_https.sh gitlab.xdevops.cn "/C=CN/ST=Guangdong/L=Guangzhou/O=xdevops/OU=xdevops/CN=gitlab.xdevops.cn"
-/opt/components/gitlab/install_gitlab_ce_https.sh <gitlab_domain> <ssl_cert_subj>
+# /opt/dendyops/components/gitlab/install_gitlab_ce_https.sh gitlab.xdevops.cn "/C=CN/ST=Guangdong/L=Guangzhou/O=xdevops/OU=xdevops/CN=gitlab.xdevops.cn"
+/opt/dendyops/components/gitlab/install_gitlab_ce_https.sh <gitlab_domain> <ssl_cert_subj>
 ```
 
 
@@ -177,11 +177,11 @@ Configure HTTPS for an existing HTTP GitLab CE using manual SSL cert:
 
 ```bash
 # Set domain name mapping in host file if necessary
-# echo "$(/opt/components/utils/get_ip.sh) gitlab.xdevops.cn" >> /etc/hosts
-echo "$(/opt/components/utils/get_ip.sh) <gitlab_domain>" >> /etc/hosts
+# echo "$(/opt/dendyops/components/utils/get_ip.sh) gitlab.xdevops.cn" >> /etc/hosts
+echo "$(/opt/dendyops/components/utils/get_ip.sh) <gitlab_domain>" >> /etc/hosts
 
-# /opt/components/gitlab/configure_gitlab_ce_manual_ssl.sh gitlab.xdevops.cn "/C=CN/ST=Guangdong/L=Guangzhou/O=xdevops/OU=xdevops/CN=gitlab.xdevops.cn"
-/opt/components/gitlab/configure_gitlab_ce_manual_ssl.sh <gitlab_domain> <ssl_cert_subj>
+# /opt/dendyops/components/gitlab/configure_gitlab_ce_manual_ssl.sh gitlab.xdevops.cn "/C=CN/ST=Guangdong/L=Guangzhou/O=xdevops/OU=xdevops/CN=gitlab.xdevops.cn"
+/opt/dendyops/components/gitlab/configure_gitlab_ce_manual_ssl.sh <gitlab_domain> <ssl_cert_subj>
 ```
 
 
@@ -195,20 +195,20 @@ echo "$(/opt/components/utils/get_ip.sh) <gitlab_domain>" >> /etc/hosts
 Install Docker latest version:
 
 ```bash
-/opt/components/docker/install_docker_ce.sh
+/opt/dendyops/components/docker/install_docker_ce.sh
 ```
 
 Install a Docker specific version:
 
 ```bash
-# Example: /opt/components/docker/install_docker_ce.sh 18.03.0
-/opt/components/docker/install_docker_ce.sh <version>
+# Example: /opt/dendyops/components/docker/install_docker_ce.sh 18.03.0
+/opt/dendyops/components/docker/install_docker_ce.sh <version>
 ```
 
 Install Docker 17.03.2 (older version):
 
 ```bash
-/opt/components/docker/install_docker_ce_17_03_2.sh
+/opt/dendyops/components/docker/install_docker_ce_17_03_2.sh
 ```
 
 
@@ -217,11 +217,11 @@ Install Docker 17.03.2 (older version):
 
 ```bash
 # Install default Docker Compose (Docker Compose 1.24.0)
-/opt/components/docker-compose/install_docker_compose.sh
+/opt/dendyops/components/docker-compose/install_docker_compose.sh
 
 # Install specific Docker Compose version
-# /opt/components/docker-compose/install_docker_compose.sh 1.24.0
-/opt/components/docker-compose/install_docker_compose.sh <version>
+# /opt/dendyops/components/docker-compose/install_docker_compose.sh 1.24.0
+/opt/dendyops/components/docker-compose/install_docker_compose.sh <version>
 ```
 
 
@@ -230,11 +230,11 @@ Install Docker 17.03.2 (older version):
 
 ```bash
 # Install default Harbor (Harbor 1.8.0)
-/opt/components/harbor/install_harbor.sh
+/opt/dendyops/components/harbor/install_harbor.sh
 
 # Install specific Harbor version,e.g Harbor 1.7.5
-# /opt/components/harbor/install_harbor.sh 1.7 5
-/opt/components/harbor/install_harbor.sh <major_version> <minor_version>
+# /opt/dendyops/components/harbor/install_harbor.sh 1.7 5
+/opt/dendyops/components/harbor/install_harbor.sh <major_version> <minor_version>
 ```
 
 
@@ -243,11 +243,11 @@ Install Docker 17.03.2 (older version):
 
 ```bash
 # Install default Nexus (nexus-3.16.1-02)
-/opt/components/nexus/install_nexus.sh
+/opt/dendyops/components/nexus/install_nexus.sh
 
 # Install specific Nexus version
-# /opt/components/nexus/install_nexus.sh 3.16.1-02
-/opt/components/nexus/install_nexus.sh <version>
+# /opt/dendyops/components/nexus/install_nexus.sh 3.16.1-02
+/opt/dendyops/components/nexus/install_nexus.sh <version>
 ```
 
 
@@ -255,7 +255,7 @@ Install Docker 17.03.2 (older version):
 ### Install Redmine
 
 ```bash
-/opt/components/redmine/install_redmine.sh
+/opt/dendyops/components/redmine/install_redmine.sh
 ```
 
 
@@ -263,13 +263,13 @@ Install Docker 17.03.2 (older version):
 ### Install SonarQube
 
 ```bash
-/opt/components/sonarqube/install_sonarqube.sh
+/opt/dendyops/components/sonarqube/install_sonarqube.sh
 ```
 
 ### Install GitLab with Docker Compose
 
 ```bash
-/opt/components/gitlab-docker/install_gitlab.sh
+/opt/dendyops/components/gitlab-docker/install_gitlab.sh
 ```
 
 
