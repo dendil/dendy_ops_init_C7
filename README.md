@@ -234,6 +234,7 @@ Install Docker 17.03.2 (older version):
 
 # Install specific Harbor version,e.g Harbor 1.7.5
 # /opt/dendyops/components/harbor/install_harbor.sh 1.7 5
+/opt/dendyops/components/harbor/install_harbor_in_k8s.sh 1.8 3 180 harbor.od.com harbor.od.com
 /opt/dendyops/components/harbor/install_harbor.sh <major_version> <minor_version>
 ```
 

@@ -213,6 +213,7 @@ amd7-200
 #harbor需要docker-compose
 /opt/dendyops/components/docker-compose/install_docker_compose.sh 
 /opt/dendyops/components/harbor/install_harbor_in_k8s.sh 1.8 3 180
+##########################################################版本号 子版本  域名    管理员密码
 /opt/dendyops/components/harbor/install_harbor_in_k8s.sh 1.8 3 180 harbor.od.com harbor.od.com
 # 反代 harbor 
 yum install -y nginx

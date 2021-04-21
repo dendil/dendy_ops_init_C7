@@ -15,5 +15,5 @@ set encoding=utf8
 set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb1803
 set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936
 set ic
-
+set pastetoggle <F9>
 set t_te=
