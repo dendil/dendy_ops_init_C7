@@ -7,14 +7,19 @@ if [[ "$IP" = "" ]]; then
         IP=`wget -qO- -t1 -T2 ipv4.icanhazip.com`
 fi
 ##### hosts        同步hosts 文件 主机名#############################
+
 function hosts_hostname(){
-    if [ `grep $IP /etc/hosts  |wc -l` -eq 1  ];then
-        New_hostname=`grep $IP /etc/hosts |awk '{print $3}'`
+    local hostfile=$1
+    if [ `grep $IP $hostfile  |wc -l` -eq 1  ];then
+        New_hostname=`grep $IP $hostfile |awk '{print $3}'`
         hostnamectl set-hostname --static $New_hostname
         echo " New hostname ==>  $New_hostname ...........ok!"
     else
-        los=`grep $IP /etc/hosts`
+        los=`grep $IP $hostfile`
         echo "not found hostname ,found $los"
     fi
 }
-hosts_hostname 
+hostfile=$1
+if [ -f  $hostfile  ];then
+hosts_hostname  $hostfile
+fi
