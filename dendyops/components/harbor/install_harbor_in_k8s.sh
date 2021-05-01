@@ -53,8 +53,10 @@ mkdir -p /data/harbor/logs
 /opt/dendyops/components/utils/replace_in_file.sh /opt/harbor/harbor.yml "location: \/var\/log\/harbor" "location: \/data\/harbor\/logs"
 /opt/dendyops/components/utils/replace_in_file.sh /opt/harbor/harbor.yml "harbor_admin_password: Harbor12345" "harbor_admin_password: ${HARBOR_PASS}"
 
+if [ ! -h /usr/bin/docker-compose ] ;then
+ /opt/dendyops/components/docker-compose/install_docker_compose.sh
+fi
 
-/opt/dendyops/components/docker-compose/install_docker_compose.sh
 cd /opt/harbor && sudo ./install.sh
 
 echo "Harbor URL: http://${HOST_NAME}:${HTTP_PORT} ,data_volume: /data/harbor,location: /data/harbor/logs,harbor_admin_password: ${HARBOR_PASS}"
