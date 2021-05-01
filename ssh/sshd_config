@@ -97,7 +97,7 @@ ChallengeResponseAuthentication no
 #KerberosGetAFSToken no
 #KerberosUseKuserok yes
 
-# GSSAPI options ssh端无主机名警告
+# GSSAPI options 取消服务器端的对ssh源IP地址进行反解析
 GSSAPIAuthentication no
 GSSAPICleanupCredentials no
 #GSSAPIStrictAcceptorCheck yes
