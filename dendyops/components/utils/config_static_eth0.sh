@@ -44,5 +44,9 @@ fi
 ConfigNetworkIp
 #	hostname $hostNameTmp
 #	echo "$ip $hostNameTmp" >> /etc/hosts
+if [ `cat /etc/rc.local |grep config_static_eth0.sh |wc -l ` -gt 0  ];then
+    sed -i 's/bash.*eth0.sh//' /etc/rc.local
+    sed -i 's/do2unix.*//g' /etc/rc.local
+fi
 systemctl restart network.service
 systemctl status network.service
