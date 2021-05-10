@@ -117,7 +117,7 @@ reboot
 # System timezone
 timezone Asia/Shanghai
 # Use network installation
-url --url="http://192.168.198.5/cobbler/ks_mirror/centos7.9.2/"
+url --url="http://192.168.198.5/cobbler/ks_mirror/centos7.9/"
 #url --url="https://mirrors.tuna.tsinghua.edu.cn/centos/7/os/x86_64/"
 # System bootloader configuration
 bootloader --append="net.ifnames=0 biosdevname=0" --location=mbr
@@ -136,11 +136,13 @@ dos2unix
 -lvm2
 
 %end
-%addon com_redhat_kdump --disable --reserve-mb='auto'
+
 %post
 wget http://192.168.189.5:8888/dendyops/components/utils/config_static_eth0.sh
-bash config_static_eth0.sh
-%addon com_redhat_kdump --disable --reserve-mb='auto'
+echo 'dos2unix  /config_static_eth0.sh' >> /etc/rc.local 
+echo 'bash /config_static_eth0.sh' >> /etc/rc.local 
+chmod +x /etc/rc.local 
+#%addon com_redhat_kdump --disable --reserve-mb='auto'
 %end
 
 ```
@@ -151,10 +153,10 @@ bash config_static_eth0.sh
 
 
 mv  /root/centos7_ks.ks  /var/lib/cobbler/kickstarts/centos7_ks.ks
-# cobbler profile add --name=my_profile1 --distro=centos7.9.2-x86_64 --kickstart=/var/lib/cobbler/kickstarts/centos7_ks.ks
+# cobbler profile add --name=my_profile1 --distro=centos7.9-x86_64 --kickstart=/var/lib/cobbler/kickstarts/centos7_ks.ks
 
 # cobbler profile list
-   centos7.3-x86_64
+   centos7.9-x86_64
    my_profile1
 
 cobbler sync
