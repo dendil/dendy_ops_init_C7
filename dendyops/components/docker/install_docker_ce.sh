@@ -35,6 +35,7 @@ cat > /etc/docker/daemon.json << EOF
    "live-restore": true
 }
 EOF
+mkdir /data/docker -p
 ./post_install_docker.sh
 
 ../utils/start_service.sh docker
