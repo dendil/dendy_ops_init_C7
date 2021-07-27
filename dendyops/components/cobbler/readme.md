@@ -33,8 +33,8 @@ systemctl start cobblerd.service;systemctl enable cobblerd.service;systemctl res
 快速命令  修改为自己对应的ip
 
 cp /etc/cobbler/settings{,.bak}
-sed -i 's/server:\ 127.0.0.1/server:\ 192.168.189.5/'  /etc/cobbler/settings
-sed -i 's/next_server:\ 127.0.0.1/next_server:\ 192.168.189.5/'  /etc/cobbler/settings
+sed -i 's/server:\ 127.0.0.1/server:\ 192.168.20.193/'  /etc/cobbler/settings
+sed -i 's/next_server:\ 127.0.0.1/next_server:\ 192.168.20.193/'  /etc/cobbler/settings
 sed -i 242s/0/1/ /etc/cobbler/settings
 sed -i 's/\$1\$mF86\/UHC\$WvcIcX2t6crBz2onWxyac./\$1\$xcvsfdsd\$cGxdcHuQGCnu5vJw5M7zX1/' /etc/cobbler/settings
 sed -i /disable/s/yes/no/ /etc/xinetd.d/tftp
