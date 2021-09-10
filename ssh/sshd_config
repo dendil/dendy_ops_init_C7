@@ -15,13 +15,13 @@
 # semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
 #
 
-Port 22
-#Port 52112
+#Port 22
+Port 52112
 #AddressFamily any
 ListenAddress 0.0.0.0
 PermitRootLogin yes
 #PermitRootLogin no
-#PermitEmptyPasswords no
+PermitEmptyPasswords no
 #不解析dns ，加速
 UseDNS no
 
@@ -49,18 +49,18 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 # obsoletes QuietMode and FascistLogging
 #SyslogFacility AUTH
 SyslogFacility AUTHPRIV
-#LogLevel INFO
+LogLevel INFO
 
 # Authentication:
 
 #LoginGraceTime 2m
 #PermitRootLogin yes
 #StrictModes yes
-#MaxAuthTries 6
+MaxAuthTries 6
 #MaxSessions 10
 
-#RSAAuthentication yes
-#PubkeyAuthentication yes
+RSAAuthentication yes
+PubkeyAuthentication yes
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
