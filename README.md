@@ -10,15 +10,10 @@
 yum install git -y
 git --version
 cd /tmp
-```
-
-## Clone 
-
-Run below commands on an empty directory:
-```bash
 git clone https://github.com/dendil/dendy_ops_init_C7.git
 cd dendy_ops_init_C7
 find . -name '*.sh' -exec chmod u+x {} \;
+bash  init.sh
 ```
 
 
