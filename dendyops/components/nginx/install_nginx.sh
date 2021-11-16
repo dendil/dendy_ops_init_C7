@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 # Locate shell script path
 SCRIPT_DIR=$(dirname $0)
