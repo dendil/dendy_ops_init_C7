@@ -585,7 +585,7 @@ function main(){
     Safesshd update
     else
     install_ops
-    add_sudoer
+    #add_sudoer
     Safesshd
     fi
     #安全化 ssh
@@ -596,7 +596,7 @@ function main(){
     #↓cron time
     time_ntp
     # 配置国内yum源
-    config_yum
+    #config_yum
     # 开机启动项精简
     #boot_centos7
     shell_unlock
