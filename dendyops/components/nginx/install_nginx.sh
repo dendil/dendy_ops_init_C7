@@ -30,7 +30,7 @@ wget ${NGINX_MIRROR_URL}/download/${NGINX_PACKAGE} --no-check-certificate
 
 tar -zxvf ${NGINX_PACKAGE}
 cd   ${NGINX_VERSION}
-./configure  --prefix=/opt/${NGINX_VERSION} --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_gzip_static_module --with-pcre --with-http_realip_module 
+./configure  --prefix=/opt/${NGINX_VERSION} --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream 
 make -j $(nproc)
 make  install -j $(nproc)
 ln -s /opt/${NGINX_VERSION} /opt/nginx
@@ -46,10 +46,7 @@ chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
 echo "nginx install ${NGINX_VERSION} complete! "
 
-#../utils/start_service.sh nginx
 
-#../utils/open_firewall_service.sh http
-#../utils/open_firewall_service.sh https
 
 
 
