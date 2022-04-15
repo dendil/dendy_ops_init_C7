@@ -40,7 +40,21 @@ chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
 
 # install nginx
-
+cat > /etc/logrotate.d/nginx <<EOF
+/opt/nginx/logs/*.log {
+	daily
+	missingok
+	rotate 14
+	compress
+	delaycompress
+	notifempty
+	create 640 root root
+	sharedscripts
+	postrotate
+		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 `cat /opt/nginx/logs/nginx.pid`
+	endscript
+}
+EOF
 
 
 
