@@ -126,13 +126,10 @@ function HideVersion(){
 ##### Safe sshd   优化 sshd 服务#####################################
 function Safesshd(){
     sshd_file=/etc/ssh/sshd_config
-    if  [ "$1" == "update" ];then
-        cp $DIR/ssh/ssh*config /etc/ssh/
-        systemctl  restart  sshd >/dev/null 2>&1
-        Msg "sshd config  update .....ok!"
-    fi
     #if [ `grep "52112" $sshd_file|wc -l` -eq 0 ];then
     if [ `grep "22" $sshd_file|wc -l` -lt 1 ];then
+        mv /etc/ssh/sshd_config{,.bak.$(date +%U%T)}
+        mv /etc/ssh/ssh_config{,.bak.$(date +%U%T)}
         cp $DIR/ssh/ssh*config /etc/ssh/
         systemctl  restart  sshd >/dev/null 2>&1
         Msg "sshd config .....ok!"
@@ -158,19 +155,18 @@ function hosts_hostname(){
 }
 ##### 开机启动项精简 ################################################
 function boot_centos7(){
- Msg  "boot_centos7 start..........."
- SVCS="wpa_supplicant alsa-state cups abrt-xorg abrt-oops avahi-daemon atd abrtd  packagekit getty@tty1 libstoragemgmt NetworkManager vmtoolsd upower udisks2 smartd rtkit-daemon packagekit ModemManager libvirtd gssproxy gdm colord chronyd accounts-daemon"
+    Msg  "boot_centos7 start..........."
+    SVCS="wpa_supplicant alsa-state cups abrt-xorg abrt-oops avahi-daemon atd abrtd  packagekit getty@tty1 libstoragemgmt NetworkManager vmtoolsd upower udisks2 smartd rtkit-daemon packagekit ModemManager libvirtd gssproxy gdm colord  accounts-daemon"
 
- function disablesvc()
- {
-  echo "Stoping/Disablingservice $SVC"
- if systemctl -t service |grep runn |grep $SVC; then systemctl stop $SVC ;  fi
- if systemctl list-unit-files --type service |grep enabled |grep $SVC; then systemctl disable $SVC; fi
+ function disablesvc(){
+    echo "Stoping/Disablingservice $SVC"
+    if systemctl -t service |grep runn |grep $SVC; then systemctl stop $SVC ;  fi
+    if systemctl list-unit-files --type service |grep enabled |grep $SVC; then systemctl disable $SVC; fi
  }
 
  for SVC in $SVCS
  do
- disablesvc $SVC
+    disablesvc $SVC
  done
  echo -e "\nDONE"
 }
@@ -428,7 +424,7 @@ function config_yum(){
     Repo_ali_base=CentOS-Base.repo.$(date +%F)
     Repo_ali_epel=epel.repo.$(date +%F)
     Lin_Path=/tmp
-    if ! curl -o ${Lin_Path}/${Repo_ali_base} http://mirrors.aliyun.com/repo/Centos-7.repo >/dev/null 2>&1 ; then
+    if ! curl -o ${Lin_Path}/${Repo_ali_base} https://repo.huaweicloud.com/repository/conf/CentOS-7-reg.repo >/dev/null 2>&1 ; then
 	   log_error "please config network "
        shell_unlock
 	   exit 1
@@ -490,15 +486,19 @@ function set_default_target(){
     Msg "set_:default_target"
 }
 
-function bin_grep(){
-    local string1=$1
-    local string2=$2
-    if [ "`/bin/grep "/${string1}"  ${string2} |wc -l`" -lt 1 ];then
-        echo " ${string2} "  >> ${string2}
-    fi
-}
+
 function install_ops(){
-    if [ "$1" == "update" ];then
+    if [ ! -d  /opt/dendyops ];then
+        chmod u+x -R $DIR/dendyops
+        cp -a $DIR/dendyops /opt/
+    fi
+    if [ ! -f  /etc/profile.d/dendyops_alias.sh  ];then
+     cp $DIR/profile.d/* /etc/profile.d/
+    fi
+    Msg 'install dendyops  profile'
+}
+function update_ops(){
+
         if [ -d  /opt/dendyops ];then
             rm -fr  /opt/dendyops
             chmod u+x -R $DIR/dendyops
@@ -510,7 +510,7 @@ function install_ops(){
             cp $DIR/profile.d/* /etc/profile.d/
              Msg 'update dendyops_ profiles'
         fi
-    fi
+
     if [ ! -d  /opt/dendyops ];then
         chmod u+x -R $DIR/dendyops
         cp -a $DIR/dendyops /opt/
@@ -520,37 +520,51 @@ function install_ops(){
     fi
     Msg 'install dendyops  profile'
 }
-function add_sudoer(){
-   
 
+
+function add_sudoer(){  
     Msg 'add/mod_sudoer........ '
-    if [ "$1" == "update" ];then
-        if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
-            useradd dendy
-            echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
-        else
-            echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
-        fi
-        Msg 'add/mod_sudoer........update '
-
-    fi
-    
-
     if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
-
-
-    useradd dendy
-    echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
-    Msg 'add/mod_sudoer........user add '
+        useradd dendy
+        echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
+        Msg 'add/mod_sudoer........user add '
     fi
     if [ `grep dendy /etc/sudoers |wc -l` -lt 1 ];then
-    chmod u+w /etc/sudoers
-    echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-    chmod u-w /etc/sudoers
-    Msg 'add/mod_sudoer......../etc/sudoers  mod..ed '
+        chmod u+w /etc/sudoers
+        echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+        chmod u-w /etc/sudoers
+        Msg 'add/mod_sudoer......../etc/sudoers  mod..ed '
     fi
 }
-
+add_scan_sshd(){
+[ -d /root/yunwei/monitor/ ] || mkdir -p /root/yunwei/monitor
+if [ ! -f /root/yunwei/monitor/scan_sshd_linux.sh ];
+then
+cat > /root/yunwei/monitor/scan_sshd_linux.sh << 'EOF'
+#!/bin/bash
+cat /var/log/secure /var/log/messages|grep -v Interrupted |awk '/Failed/{print $(NF-3)}'|sort|uniq -c|awk '{print $2"="$1;}' > /root/black.txt
+DEFINE="12"
+for i in `cat /root/black.txt`
+do
+IP=`echo $i |awk -F= '{print $1}'`
+NUM=`echo $i|awk -F= '{print $2}'`
+if [ $NUM -gt $DEFINE ];
+then
+grep $IP /etc/hosts.deny > /dev/null
+if [ $? -gt 0 ];
+then
+echo "sshd:$IP" >> /etc/hosts.deny
+fi
+fi
+done
+EOF
+fi
+chmod a+x /root/yunwei/monitor/scan_sshd_linux.sh
+grep -q scan_sshd_linux.sh /etc/crontab || echo "*/10 * * * * root  /root/yunwei/monitor/scan_sshd_linux.sh" >> /etc/crontab
+/bin/systemctl restart crond.service
+/bin/systemctl restart sshd.service
+echo -e "add scan_sshd OK!"
+}
 
 function main(){
 
@@ -579,40 +593,50 @@ function main(){
     #check_folder /backup
     #关闭selinux
     selinux
+    boot_centos7
     # 关闭防火墙
     close_iptables
     #清除版本信息（安全操作） 一般不开启
     #HideVersion
-    if [ "$1" == "update" ];then
-    install_ops update
-    add_sudoer  update
-    Safesshd update
-    else
     install_ops
-    #add_sudoer
+    add_sudoer
     Safesshd
-    fi
     #安全化 ssh
     # 扩大文件描述符
     Openfile
     #设置默认启动等级
     set_default_target
+    add_scan_sshd
     #↓cron time
     time_ntp
     # 配置国内yum源
-    #config_yum
-    install_tools
-    # 开机启动项精简
-    #boot_centos7
+    if [ "$1"  == "out" ];then
+        install_tools
+    else
+        config_yum
+    fi
+
+
     shell_unlock
     Msg  "script end ,5s exit see log ${LOG_DIR}/${LOG_FILE}"
     sleep 1
 }
-###没有开启 ip转发
+
+useage(){
+echo '
+init.sh main        (国内)
+init.sh out         (国外)
+init.sh ssh_safe    (ssh 安全化)
+init.sh ssh_FP      (ssh防爆破)
+init.sh HideVersion (HideVersion)
+init.sh synctime    (time_sync)
+init.sh close_iptables
+init.sh update_ops  (update_ops)
+'
+}
 UP=$1
-if [ "$UP" == "update" ];then
-    main  update
-else
-    main
+if [ ! "$UP" ];then
+
 fi
 
+case $UP in 
