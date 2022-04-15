@@ -471,7 +471,11 @@ function config_yum(){
         yum clean all  >/dev/null 2>&1 && echo "1" > /etc/yum.repos.d/test
         Msg "yum is  completed! "
     fi
-    SOFT=" lrzsz dos2unix ntp gcc bc tcl  expect rsync chrony vim \
+    install_tools
+    Msg "$SOFT installed"
+}
+function install_tools(){
+ 	SOFT=" lrzsz dos2unix ntp gcc bc tcl  expect rsync chrony vim \
       wget bash-completion lrzsz nmap  tree htop iftop \
       net-tools python3  yum-utils curl bind-utils unzip mtr tailf net-tools"
     
@@ -597,6 +601,7 @@ function main(){
     time_ntp
     # 配置国内yum源
     #config_yum
+    install_tools
     # 开机启动项精简
     #boot_centos7
     shell_unlock
