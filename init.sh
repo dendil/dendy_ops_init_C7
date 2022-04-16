@@ -632,11 +632,35 @@ init.sh HideVersion (HideVersion)
 init.sh synctime    (time_sync)
 init.sh close_iptables
 init.sh update_ops  (update_ops)
+init.sh add_scan_sshd 
 '
 }
 UP=$1
-if [ ! "$UP" ];then
-
-fi
-
-case $UP in 
+case $UP in
+    main)
+        main
+        ;;
+    out)
+        main out
+        ;;
+    ssh_FP)
+        add_scan_sshd
+        ;;
+    ssh_safe)
+        ssh_safe
+        ;;
+    HideVersion)
+        HideVersion
+        ;;
+    synctime)
+    time_sync
+        ;;
+    close_iptables)
+        close_iptables
+        ;;
+    update_ops)
+        update_ops
+        ;;
+    *)
+        useage
+esac

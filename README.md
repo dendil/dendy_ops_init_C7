@@ -13,7 +13,18 @@ cd /tmp
 git clone https://github.com/dendil/dendy_ops_init_C7.git
 cd dendy_ops_init_C7
 find . -name '*.sh' -exec chmod u+x {} \;
-bash  init.sh
+bash  init.sh main
+
+
+init.sh main        (国内)
+init.sh out         (国外)
+init.sh ssh_safe    (ssh 安全化)
+init.sh ssh_FP      (ssh防爆破)
+init.sh HideVersion (HideVersion)
+init.sh synctime    (time_sync)
+init.sh close_iptables
+init.sh update_ops  (update_ops)
+init.sh add_scan_sshd 
 ```
 
 
@@ -42,6 +53,17 @@ bash  init.sh
 ```bash
 /opt/dendyops/components/utils/set_hostname.sh  <newhostname>
 ```
+
+
+
+
+
+
+
+
+
+
+
 ### Install salt-master  salt-ssh 
 ```bash
 /opt/dendyops/components/saltstack/install_salt_master.sh
