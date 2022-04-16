@@ -501,22 +501,22 @@ function update_ops(){
 
         if [ -d  /opt/dendyops ];then
             rm -fr  /opt/dendyops
-            chmod u+x -R $DIR/dendyops
-            cp -a $DIR/dendyops /opt/
+            chmod u+x -R dendyops
+            cp -a dendyops /opt/
             Msg 'update dendyops files'
         fi
         if [ -f  /etc/profile.d/dendyops_alias.sh  ];then
             rm -fr /etc/profile.d/dendyops*.sh
-            cp $DIR/profile.d/* /etc/profile.d/
+            cp profile.d/* /etc/profile.d/
              Msg 'update dendyops_ profiles'
         fi
 
     if [ ! -d  /opt/dendyops ];then
-        chmod u+x -R $DIR/dendyops
-        cp -a $DIR/dendyops /opt/
+        chmod u+x -R dendyops
+        cp -a dendyops /opt/
     fi
     if [ ! -f  /etc/profile.d/dendyops_alias.sh  ];then
-     cp $DIR/profile.d/* /etc/profile.d/
+     cp  profile.d/* /etc/profile.d/
     fi
     Msg 'install dendyops  profile'
 }
