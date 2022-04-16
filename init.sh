@@ -624,15 +624,15 @@ function main(){
 
 useage(){
 echo '
-init.sh main        (国内)
-init.sh out         (国外)
-init.sh ssh_safe    (ssh 安全化)
-init.sh ssh_FP      (ssh防爆破)
-init.sh HideVersion (HideVersion)
-init.sh synctime    (time_sync)
-init.sh close_iptables
-init.sh update_ops  (update_ops)
-init.sh add_scan_sshd 
+bash init.sh main        (国内)
+bash init.sh out         (国外)
+bash init.sh ssh_safe    (ssh 安全化)
+bash init.sh ssh_FP      (ssh防爆破)
+bash init.sh HideVersion (HideVersion)
+bash init.sh synctime    (time_sync)
+bash init.sh close_iptables
+bash init.sh update_ops  (update_ops)
+bash init.sh add_scan_sshd 
 '
 }
 UP=$1
