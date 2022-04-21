@@ -56,8 +56,10 @@ bash  init.sh
 
 
 
-
-
+### Install Nginx
+```bash
+/opt/dendyops/components/nginx/install_nginx.sh
+```
 
 
 

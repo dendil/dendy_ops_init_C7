@@ -38,7 +38,7 @@ function get_base_path(){
     [[ $SOURCE != /*  ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
  done
  DIR="$( cd -P "$( dirname "$SOURCE"  )" && pwd  )"
- Msg "$DIR"
+ Msg "DIR --> $DIR"
 }
 
 # Lock################################################################
@@ -101,7 +101,7 @@ function selinux(){
             Msg "Close SElinux"
         fi
     else
-        log_info " selinux is disabled "
+        Msg " selinux is disabled "
     fi
 }
 #关闭防火墙##########################################################
@@ -169,6 +169,7 @@ function boot_centos7(){
     disablesvc $SVC
  done
  echo -e "\nDONE"
+ Msg  "boot_centos7 done..........."
 }
 # 同步时间
 function sync_date(){
@@ -214,7 +215,7 @@ function time_ntp(){
         echo 'server 2.cn.pool.ntp.org iburst' >> /etc/chrony.conf
         echo 'server 3.cn.pool.ntp.org iburst' >> /etc/chrony.conf
         fi
-
+    Msg " time ntp ok !"
     systemctl enable chronyd
     systemctl start chronyd
 }
@@ -537,6 +538,7 @@ function add_sudoer(){
     fi
 }
 add_scan_sshd(){
+    Msg "add scan_sshd ........"
 [ -d /root/yunwei/monitor/ ] || mkdir -p /root/yunwei/monitor
 if [ ! -f /root/yunwei/monitor/scan_sshd_linux.sh ];
 then
@@ -563,9 +565,9 @@ chmod a+x /root/yunwei/monitor/scan_sshd_linux.sh
 grep -q scan_sshd_linux.sh /etc/crontab || echo "*/10 * * * * root  /root/yunwei/monitor/scan_sshd_linux.sh" >> /etc/crontab
 /bin/systemctl restart crond.service
 /bin/systemctl restart sshd.service
-echo -e "add scan_sshd OK!"
+Msg "add scan_sshd OK!"
 }
-
+get_base_path
 function main(){
 
  # root 启动
@@ -579,7 +581,7 @@ function main(){
  # 检查网络是否可以上网 
     test_ping
  # 获取所在目录
-    get_base_path
+    
  # 获取本机ip
     getIP
  # 显示基础信息
