@@ -34,6 +34,8 @@ fi
 
 tar -zxvf   ${NGINX_PACKAGE}
 cd          ${NGINX_VERSION}
+[ -d /opt/${NGINX_VERSION} ] &&  mv /opt/${NGINX_VERSION}{,.bak.$(date +%U%T)}
+[ -L /opt/nginx ] && mv /opt/nginx{,.bak.$(date +%U%T)}
 ./configure  --prefix=/opt/${NGINX_VERSION} --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream 
 make -j $(nproc)
 make  install -j $(nproc)
@@ -42,23 +44,24 @@ cp  /opt/dendyops/components/nginx/nginx.conf   /opt/nginx/conf/
 mkdir -p /opt/nginx/conf/conf.d/
 chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
-
+[ -f /usr/lib/systemd/system/nginx.service ] || cp  /opt/dendyops/components/nginx/nginx.service   /usr/lib/systemd/system/nginx.service
 # install nginx
+if [ ! -f /etc/logrotate.d/nginx ];then
 cat > /etc/logrotate.d/nginx << EOF
 /opt/nginx/logs/*.log {
 	daily
 	missingok
 	rotate 31
 	compress
-	delaycompress
 	notifempty
-	create 640 root root
+	create 640 nginx root
 	sharedscripts
 	postrotate
 		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 `cat /opt/nginx/logs/nginx.pid`
 	endscript
 }
 EOF
+fi
 
 
 
