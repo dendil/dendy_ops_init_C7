@@ -57,7 +57,7 @@ cat > /etc/logrotate.d/nginx << EOF
 	create 640 nginx root
 	sharedscripts
 	postrotate
-		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 `cat /opt/nginx/logs/nginx.pid`
+		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 \`cat /opt/nginx/logs/nginx.pid\`
 	endscript
 }
 EOF
