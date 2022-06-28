@@ -3,7 +3,7 @@
 
 
 ## Get started
-
+only for Cents7
 ## Install Git
 
 ```bash
@@ -28,10 +28,7 @@ bash init.sh add_scan_sshd
 
 
 ## Init centos7
-```bash
-sudo su
-bash  init.sh
-```
+
 初始化项目
 
  - 关闭selinux
@@ -49,7 +46,9 @@ bash  init.sh
 
 ## Set New Hostname
 ```bash
+
 /opt/dendyops/components/utils/set_hostname.sh  <newhostname>
+
 ```
 
 
