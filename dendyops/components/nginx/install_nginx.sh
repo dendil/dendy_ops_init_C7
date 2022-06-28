@@ -46,22 +46,9 @@ chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
 [ -f /usr/lib/systemd/system/nginx.service ] || cp  /opt/dendyops/components/nginx/nginx.service   /usr/lib/systemd/system/nginx.service
 # install nginx
-if [ ! -f /etc/logrotate.d/nginx ];then
-cat > /etc/logrotate.d/nginx << EOF
-/opt/nginx/logs/*.log {
-	daily
-	missingok
-	rotate 31
-	compress
-	notifempty
-	create 640 nginx root
-	sharedscripts
-	postrotate
-		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 \`cat /opt/nginx/logs/nginx.pid\`
-	endscript
-}
-EOF
-fi
+[  -f /etc/logrotate.d/nginx ] || cp /opt/dendyops/components/nginx/logrotate_nginx /etc/logrotate.d/nginx
+
+systemctl enable nginx
 
 
 
