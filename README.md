@@ -13,18 +13,16 @@ cd /tmp
 git clone https://github.com/dendil/dendy_ops_init_C7.git
 cd dendy_ops_init_C7
 find . -name '*.sh' -exec chmod u+x {} \;
-bash  init.sh main
 
-
-init.sh main        (国内)
-init.sh out         (国外)
-init.sh ssh_safe    (ssh 安全化)
-init.sh ssh_FP      (ssh防爆破)
-init.sh HideVersion (HideVersion)
-init.sh synctime    (time_sync)
-init.sh close_iptables
-init.sh update_ops  (update_ops)
-init.sh add_scan_sshd 
+bash init.sh main        (国内)
+bash init.sh out         (国外)
+bash init.sh ssh_safe    (ssh 安全化)
+bash init.sh ssh_FP      (ssh防爆破)
+bash init.sh HideVersion (HideVersion)
+bash init.sh synctime    (time_sync)
+bash init.sh close_iptables
+bash init.sh update_ops  (update_ops)
+bash init.sh add_scan_sshd 
 ```
 
 
@@ -62,28 +60,43 @@ bash  init.sh
 ```
 
 
-
-
-
-
-### Install salt-master  salt-ssh 
-```bash
-/opt/dendyops/components/saltstack/install_salt_master.sh
-
-```
-
-
-
-### Install salt-minion
-```bash
-/opt/dendyops/components/saltstack/install_salt_minion.sh
-
-```
-
 ### Use Aliyun Yum repo
 
 ```bash
-/opt/dendyops/components/aliyun/use_aliyun_yum_repo.sh
+/opt/dendyops/components/yum/use_aliyun_yum_repo.sh
+or
+/opt/dendyops/components/yum/use_huawei_yum_repo.sh
+```
+
+
+
+### Install Docker CE
+
+Install Docker latest version:
+
+```bash
+/opt/dendyops/components/docker/install_docker_ce.sh
+#国外服务器用out
+/opt/dendyops/components/docker/install_docker_ce_out.sh
+```
+
+
+
+
+### Install Docker Compose
+
+```bash
+# Install default Docker Compose (Docker Compose 1.24.0)
+/opt/dendyops/components/docker-compose/install_docker_compose.sh
+
+# Install specific Docker Compose version
+# /opt/dendyops/components/docker-compose/install_docker_compose.sh 1.24.0
+/opt/dendyops/components/docker-compose/install_docker_compose.sh <version>
+```
+### Add juna PublicKey
+```bash
+/opt/dendyops/components/juna/pubkey/add_keys.sh
+
 ```
 
 
@@ -209,39 +222,7 @@ echo "$(/opt/dendyops/components/utils/get_ip.sh) <gitlab_domain>" >> /etc/hosts
 
 
 
-### Install Docker CE
 
-Install Docker latest version:
-
-```bash
-/opt/dendyops/components/docker/install_docker_ce.sh
-```
-
-Install a Docker specific version:
-
-```bash
-# Example: /opt/dendyops/components/docker/install_docker_ce.sh 18.03.0
-/opt/dendyops/components/docker/install_docker_ce.sh <version>
-```
-
-Install Docker 17.03.2 (older version):
-
-```bash
-/opt/dendyops/components/docker/install_docker_ce_17_03_2.sh
-```
-
-
-
-### Install Docker Compose
-
-```bash
-# Install default Docker Compose (Docker Compose 1.24.0)
-/opt/dendyops/components/docker-compose/install_docker_compose.sh
-
-# Install specific Docker Compose version
-# /opt/dendyops/components/docker-compose/install_docker_compose.sh 1.24.0
-/opt/dendyops/components/docker-compose/install_docker_compose.sh <version>
-```
 
 
 
@@ -293,3 +274,17 @@ Install Docker 17.03.2 (older version):
 ```
 
 
+
+### Install salt-master  salt-ssh 
+```bash
+/opt/dendyops/components/saltstack/install_salt_master.sh
+
+```
+
+
+
+### Install salt-minion
+```bash
+/opt/dendyops/components/saltstack/install_salt_minion.sh
+
+```
