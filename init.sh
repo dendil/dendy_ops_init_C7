@@ -127,7 +127,7 @@ function HideVersion(){
 function Safesshd(){
     sshd_file=/etc/ssh/sshd_config
     #if [ `grep "52112" $sshd_file|wc -l` -eq 0 ];then
-    if [ `grep "22" $sshd_file|wc -l` -lt 1 ];then
+    if [ `grep "52112" $sshd_file|wc -l` -lt 1 ];then
         mv /etc/ssh/sshd_config{,.bak.$(date +%U%T)}
         mv /etc/ssh/ssh_config{,.bak.$(date +%U%T)}
         cp $DIR/ssh/ssh*config /etc/ssh/

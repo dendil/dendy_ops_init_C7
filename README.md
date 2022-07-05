@@ -75,8 +75,10 @@ Install Docker latest version:
 
 ```bash
 /opt/dendyops/components/docker/install_docker_ce.sh
+/opt/dendyops/components/docker/install_docker_ce.sh /services
 #国外服务器用out
-/opt/dendyops/components/docker/install_docker_ce_out.sh
+/opt/dendyops/components/docker/install_docker_ce_out.sh 
+/opt/dendyops/components/docker/install_docker_ce_out.sh  /services
 ```
 
 
