@@ -97,6 +97,7 @@ Install Docker latest version:
 ### Add juna PublicKey
 ```bash
 /opt/dendyops/components/juna/pubkey/add_keys.sh
+/opt/dendyops/components/juna/deploykey/install_deploykey.sh
 
 ```
 
