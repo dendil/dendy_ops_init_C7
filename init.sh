@@ -17,7 +17,7 @@ function test_ping(){
         Msg "test_ping() networking  is ok!"
         
     else
-        ping -c 2 baidu.com >/dev/null
+        ping -c 2 8.8.8.8 >/dev/null
         if [ $? -eq 0 ];then
             Msg "test_ping() networking  is ok!"
             echo  "1" >/etc/selinux/_test_ping
