@@ -29,7 +29,6 @@ if [ -n "${install_path}" ] ; then
    "graph": "${install_path}/docker",
    "storage-driver": "overlay2",
    "insecure-registries": ["registry.access.redhat.com","quay.io"],
-   "registry-mirrors": ["https://jltw059v.mirror.aliyuncs.com"],
    "bip": "172.16.${_bip_4}.1/24",  
    "exec-opts": ["native.cgroupdriver=systemd"],
    "live-restore": true
