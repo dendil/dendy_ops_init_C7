@@ -11,7 +11,7 @@ fi
 
 VERSION="$1"
 if [ ! -n "${VERSION}" ]; then
-    VERSION="1.24.0"
+    VERSION="v2.7.0"
 fi
 
 
