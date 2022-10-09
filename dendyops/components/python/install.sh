@@ -45,7 +45,7 @@ install_python3_from_source_with_yum() {
 
 yum groupinstall -y "Development Tools"
  
-yum install -y openssl-devel openssl libffi-devel bzip2-devel wget
+yum install -y openssl-devel openssl libffi-devel bzip2-devel wget zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
 
   echo "cd $TMP_PATH"
   cd "$TMP_PATH"

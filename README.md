@@ -90,6 +90,8 @@ Install Docker latest version:
 # Install default Docker Compose (Docker Compose 1.24.0)
 /opt/dendyops/components/docker-compose/install_docker_compose.sh
 
+#国外服务器 from github
+/opt/dendyops/components/docker-compose/install_docker_compose_from_github.sh
 # Install specific Docker Compose version
 # /opt/dendyops/components/docker-compose/install_docker_compose.sh 1.24.0
 /opt/dendyops/components/docker-compose/install_docker_compose.sh <version>

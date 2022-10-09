@@ -41,7 +41,9 @@ make -j $(nproc)
 make  install -j $(nproc)
 ln -s /opt/${NGINX_VERSION} /opt/nginx
 cp  /opt/dendyops/components/nginx/nginx.conf   /opt/nginx/conf/
-mkdir -p /opt/nginx/conf/conf.d/
+
+mkdir -p /opt/nginx/conf/conf.d/ /opy/nginx/sslkey
+cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx/conf/conf.d/
 chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
 [ -f /usr/lib/systemd/system/nginx.service ] || cp  /opt/dendyops/components/nginx/nginx.service   /usr/lib/systemd/system/nginx.service
