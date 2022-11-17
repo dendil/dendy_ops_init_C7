@@ -21,7 +21,7 @@ bash init.sh ssh_FP      (ssh防爆破)
 bash init.sh HideVersion (HideVersion)
 bash init.sh synctime    (time_sync)
 bash init.sh close_iptables
-bash init.sh update_ops  (update_ops)
+bash init.sh update_ops  (更新)
 bash init.sh add_scan_sshd 
 ```
 
@@ -55,6 +55,7 @@ bash init.sh add_scan_sshd
 
 ### Install Nginx
 ```bash
+编译安装最新版nginx
 /opt/dendyops/components/nginx/install_nginx.sh
 ```
 
@@ -64,6 +65,7 @@ bash init.sh add_scan_sshd
 ```bash
 /opt/dendyops/components/yum/use_aliyun_yum_repo.sh
 or
+# 建议用华为源
 /opt/dendyops/components/yum/use_huawei_yum_repo.sh
 ```
 
