@@ -26,7 +26,7 @@ if [ -n "${install_path}" ] ; then
   mkdir -p /etc/docker
   cat > /etc/docker/daemon.json << EOF
 {
-   "graph": "${install_path}/docker",
+   "data-root": "${install_path}/docker",
    "storage-driver": "overlay2",
    "insecure-registries": ["registry.access.redhat.com","quay.io"],
    "bip": "172.16.${_bip_4}.1/24",  
