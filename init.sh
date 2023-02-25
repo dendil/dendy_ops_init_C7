@@ -468,7 +468,6 @@ function config_yum(){
         yum clean all  >/dev/null 2>&1 && echo "1" > /etc/yum.repos.d/test
         Msg "yum is  completed! "
     fi
-    install_tools
     Msg "$SOFT installed"
 }
 function install_tools(){
@@ -616,6 +615,7 @@ function main(){
         install_tools
     else
         config_yum
+        install_tools
     fi
 
 
