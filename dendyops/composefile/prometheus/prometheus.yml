@@ -1,0 +1,71 @@
+global:
+  scrape_interval:     30s
+  evaluation_interval: 30s
+rule_files:
+  - '/alerts/*.yml'
+scrape_configs:
+  - job_name: prometheus_30_93
+    static_configs:
+      - targets: ['192.168.30.93:9090']
+        labels:
+          instance: prometheus
+  - job_name: alertmanager
+    static_configs:
+      - targets: ['192.168.30.93:9093']
+        labels:
+          instance: alertmanager
+  - job_name: blackbox_30_93_9115
+    static_configs:
+      - targets: ['192.168.30.93:9115']
+        labels:
+          instance: blackbox
+############# smu  ######################3#
+
+############## 2333#####################
+  - job_name: redis_exporter_3body_45_77_15_194
+    proxy_url: 'http://192.168.30.200:1080'
+    static_configs:
+    - targets: ['0.0.0.0:10124']
+
+
+
+#############################################
+  - job_name: node_exporter_192_168_30_0
+    static_configs:
+    - targets: ['192.168.30.93:10120']
+# http检测配置
+  - job_name: 'blackbox'
+    scrape_interval: 40s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          # - https://baidu.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.30.93:9115
+  - job_name: 'blackbox_proxy'
+    scrape_interval: 40s
+    metrics_path: /probe
+    params:
+      module: [http_with_proxy]
+    static_configs:
+      - targets:
+          # use proxy
+          # - https://youtube.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.30.93:9115
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["192.168.30.93:9093"]

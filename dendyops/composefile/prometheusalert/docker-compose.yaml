@@ -1,0 +1,12 @@
+version: "3"
+services:
+  prometheus-alert:
+    container_name: prometheusalert
+    image: feiyu563/prometheus-alert:latest
+    #network_mode: host
+    restart: always
+    #user: root
+    ports:
+      - 9080:8080
+    volumes:
+      - /opt/prometheusalert/conf:/app/conf

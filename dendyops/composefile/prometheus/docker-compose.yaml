@@ -1,0 +1,19 @@
+version: "3"
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    #network_mode: host
+    restart: always
+    user: root
+    ports:
+      - 9090:9090
+    volumes:
+      - /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /opt/prometheus/alerts:/alerts
+      - /etc/localtime:/etc/localtime:ro
+      - /data/prome_data:/prometheus 
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-lifecycle
+      - --storage.tsdb.path=/prometheus

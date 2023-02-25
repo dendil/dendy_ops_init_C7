@@ -1,0 +1,12 @@
+version: "3"
+services:
+  blackbox:
+    container_name: blackbox
+    image: prom/blackbox-exporter
+    #network_mode: host
+    ports:
+      - 9115:9115
+    volumes:
+    - /opt/prometheus_black/blackbox.yml:/config/blackbox.yml
+    command:
+      --config.file=/config/blackbox.yml
