@@ -8,11 +8,14 @@ only for Cents7
 
 ```bash
 yum install git -y
-git --version
-cd /tmp
-git clone https://github.com/dendil/dendy_ops_init_C7.git
-cd dendy_ops_init_C7
+[ -L /tmp/dendy_ops_init_C7  ] && rm -fr /tmp/dendy_ops_init_C7
+t_dir=`mktemp -d -t  den_ops.XXXXXX` &&  ln -s $t_dir /tmp/dendy_ops_init_C7
+git clone https://github.com/dendil/dendy_ops_init_C7.git $t_dir
+cd  /tmp/dendy_ops_init_C7
 find . -name '*.sh' -exec chmod u+x {} \;
+
+bash init.sh main    
+
 
 bash init.sh main        (国内)
 bash init.sh out         (国外)
@@ -23,6 +26,13 @@ bash init.sh synctime    (time_sync)
 bash init.sh close_iptables
 bash init.sh update_ops  (更新)
 bash init.sh add_scan_sshd 
+
+
+
+
+
+
+
 ```
 
 
@@ -47,7 +57,7 @@ bash init.sh add_scan_sshd
 ## Set New Hostname
 ```bash
 
-/opt/dendyops/components/utils/set_hostname.sh  <newhostname>
+hostname-s  <newhostname>
 
 ```
 
@@ -55,18 +65,20 @@ bash init.sh add_scan_sshd
 
 ### Install Nginx
 ```bash
-编译安装最新版nginx
-/opt/dendyops/components/nginx/install_nginx.sh
+#编译安装最新版nginx
+install_nginx
 ```
 
 
-### Use Aliyun Yum repo
+### Use HW Yum repo
 
 ```bash
-/opt/dendyops/components/yum/use_aliyun_yum_repo.sh
-or
+
 # 建议用华为源
+use_hw_yum_repo
+
 /opt/dendyops/components/yum/use_huawei_yum_repo.sh
+
 ```
 
 
