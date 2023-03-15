@@ -605,6 +605,10 @@ function main(){
     #安全化 ssh
     # 扩大文件描述符
     Openfile
+    # sysctl
+     mv /etc/sysctl.d/sysctl.conf{,.$(date +%F)}
+     cp sysctl.conf /etc/sysctl.d/sysctl.conf
+     sysctl -p
     #设置默认启动等级
     set_default_target
     add_scan_sshd
