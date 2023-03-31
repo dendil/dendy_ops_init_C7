@@ -49,7 +49,8 @@ chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 [ -f /usr/lib/systemd/system/nginx.service ] || cp  /opt/dendyops/components/nginx/nginx.service   /usr/lib/systemd/system/nginx.service
 # install nginx
 [  -f /etc/logrotate.d/nginx ] || cp /opt/dendyops/components/nginx/logrotate_nginx /etc/logrotate.d/nginx
-
+chmod 644 /etc/logrotate.d/nginx
+chmod 644 /opt/nginx/conf/conf.d/nginx_status.conf
 systemctl enable nginx
 
 

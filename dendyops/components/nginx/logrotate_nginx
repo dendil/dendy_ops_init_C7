@@ -2,9 +2,9 @@
 	daily
 	missingok
 	rotate 31
-	compress
+	#compress #压缩
 	notifempty
-	create 640 nginx root
+	create 644 nginx root
 	sharedscripts
 	postrotate
 		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 `cat /opt/nginx/logs/nginx.pid`
