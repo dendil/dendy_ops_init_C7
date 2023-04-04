@@ -40,17 +40,30 @@ cd          ${NGINX_VERSION}
 make -j $(nproc)
 make  install -j $(nproc)
 ln -s /opt/${NGINX_VERSION} /opt/nginx
-cp  /opt/dendyops/components/nginx/nginx.conf   /opt/nginx/conf/
+mkdir -p /opt/nginx/conf/conf.d/  /opy/nginx/sslkey  /opt/nginx/sslkey/none
+[ -f /opt/nginx/conf/nginx.conf               ] || cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx/conf/
+[ -f /opt/nginx/conf/conf.d/nginx_status.conf ] || cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx/conf/conf.d/
+[ -f /etc/logrotate.d/nginx                   ] || cp  /opt/dendyops/components/nginx/logrotate_nginx     /etc/logrotate.d/nginx
+[ -f /usr/lib/systemd/system/nginx.service    ] || cp  /opt/dendyops/components/nginx/nginx.service       /usr/lib/systemd/system/nginx.service
+[ -f /opt/nginx/conf/conf.d/default.conf      ] || cp  /opt/dendyops/components/nginx/default.conf        /opt/nginx/conf/conf.d/default.conf
 
-mkdir -p /opt/nginx/conf/conf.d/ /opy/nginx/sslkey
-cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx/conf/conf.d/
+
+
 chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
-[ -f /usr/lib/systemd/system/nginx.service ] || cp  /opt/dendyops/components/nginx/nginx.service   /usr/lib/systemd/system/nginx.service
-# install nginx
-[  -f /etc/logrotate.d/nginx ] || cp /opt/dendyops/components/nginx/logrotate_nginx /etc/logrotate.d/nginx
-chmod 644 /etc/logrotate.d/nginx
-chmod 644 /opt/nginx/conf/conf.d/nginx_status.conf
+chmod 6444 /opt/nginx/conf/nginx.conf
+chmod 644  /etc/logrotate.d/nginx
+chmod 644  /opt/nginx/conf/conf.d/nginx_status.conf
+chmod 644  /opt/nginx/conf/conf.d/default.conf
+cd /opt/nginx/sslkey/none
+[ -f none.key ] && rm -f none.key 
+[ -f none.pub ] && rm -f none.pub
+[ -f none.csr ] && rm -f none.csr
+[ -f none.crt ] && rm -f none.crt
+openssl genrsa -out  none.key  2048 
+openssl rsa    -in   none.key  -pubout   -out none.pub    
+openssl req    -new  -key      none.key  -out none.csr  -subj     "/C=XX/L=Default City/O=Default Company Ltd"
+openssl x509   -req  -days     3650      -in  none.csr  -signkey  none.key  -out  none.crt
 systemctl enable nginx
 
 
