@@ -268,22 +268,7 @@ echo "$(/opt/dendyops/components/utils/get_ip.sh) <gitlab_domain>" >> /etc/hosts
 # /opt/dendyops/components/nexus/install_nexus.sh 3.16.1-02
 /opt/dendyops/components/nexus/install_nexus.sh <version>
 ```
-
-
-
-### Install Redmine
-
-```bash
-/opt/dendyops/components/redmine/install_redmine.sh
-```
-
-
-
-### Install SonarQube
-
-```bash
-/opt/dendyops/components/sonarqube/install_sonarqube.sh
-```
+ 
 
 ### Install GitLab with Docker Compose
 
