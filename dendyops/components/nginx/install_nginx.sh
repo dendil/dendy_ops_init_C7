@@ -41,7 +41,7 @@ make -j $(nproc)
 make  install -j $(nproc)
 ln -s /opt/${NGINX_VERSION} /opt/nginx
 mkdir -p /opt/nginx/conf/conf.d/  /opy/nginx/sslkey  /opt/nginx/sslkey/none
-[ -f /opt/nginx/conf/nginx.conf               ] || cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx/conf/
+[ -f /opt/nginx/conf/nginx.conf               ] && rm -fr /opt/nginx/conf/nginx.conf  && cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx/conf/
 [ -f /opt/nginx/conf/conf.d/nginx_status.conf ] || cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx/conf/conf.d/
 [ -f /etc/logrotate.d/nginx                   ] || cp  /opt/dendyops/components/nginx/logrotate_nginx     /etc/logrotate.d/nginx
 [ -f /usr/lib/systemd/system/nginx.service    ] || cp  /opt/dendyops/components/nginx/nginx.service       /usr/lib/systemd/system/nginx.service
@@ -51,7 +51,7 @@ mkdir -p /opt/nginx/conf/conf.d/  /opy/nginx/sslkey  /opt/nginx/sslkey/none
 
 chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
-chmod 6444 /opt/nginx/conf/nginx.conf
+chmod 644 /opt/nginx/conf/nginx.conf
 chmod 644  /etc/logrotate.d/nginx
 chmod 644  /opt/nginx/conf/conf.d/nginx_status.conf
 chmod 644  /opt/nginx/conf/conf.d/default.conf
