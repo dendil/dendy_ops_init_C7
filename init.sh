@@ -473,7 +473,7 @@ function config_yum(){
 function install_tools(){
  	SOFT=" lrzsz dos2unix ntp gcc bc tcl  expect rsync chrony vim \
       wget bash-completion lrzsz nmap  tree htop iftop \
-      net-tools python3  yum-utils curl bind-utils unzip mtr tailf net-tools"
+      net-tools python3  yum-utils curl bind-utils unzip mtr tailf net-tools jq"
     
     yum install  $SOFT  -y >>/dev/null 2>&1 &
     Msg "$SOFT installed"
