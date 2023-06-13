@@ -12,7 +12,7 @@ fi
 VERSION="$1"
 
 if [ ! -n "${VERSION}" ]; then
-    VERSION="1.20.1"
+    VERSION="1.25.0"
 fi
 [ -d /opt/src ]  || mkdir -p /opt/src
 cd /opt/src
@@ -37,9 +37,10 @@ tar -zxvf   ${NGINX_PACKAGE}
 cd          ${NGINX_VERSION}
 [ -d /opt/${NGINX_VERSION} ] &&  mv /opt/${NGINX_VERSION}{,.bak.$(date +%U%T)}
 [ -L /opt/nginx ] && mv /opt/nginx{,.bak.$(date +%U%T)}
-./configure  --prefix=/opt/${NGINX_VERSION} --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_v2_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream  --add-module=/opt/src/nginx-module-vts
+./configure  --prefix=/opt/nginx --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_v2_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream  --add-module=/opt/src/nginx-module-vts
 make -j $(nproc)
-make  install -j $(nproc)
+make  install 
+mv /opt/nginx /opt/${NGINX_VERSION}
 ln -s /opt/${NGINX_VERSION} /opt/nginx
 mkdir -p /opt/nginx/conf/conf.d/  /opy/nginx/sslkey  /opt/nginx/sslkey/none
 [ -f /opt/nginx/conf/nginx.conf               ] && rm -fr /opt/nginx/conf/nginx.conf  && cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx/conf/
