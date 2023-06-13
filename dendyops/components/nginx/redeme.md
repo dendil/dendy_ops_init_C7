@@ -18,3 +18,11 @@ cd /opt/src
 git clone https://github.com/arut/nginx-dav-ext-module.git
 ./configure  --prefix=/opt/nginx-1.20.2 --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream  --add-module=/opt/src/nginx-dav-ext-module --with-http_dav_module
 ```
+
+# 
+```bash
+cd /opt/src
+git clone https://github.com/vozlt/nginx-module-vts.git
+
+./configure  --prefix=/opt/${NGINX_VERSION} --with-http_ssl_module --with-http_v2_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream --add-module=/opt/src/nginx-module-vts 
+```
