@@ -6,8 +6,8 @@ server {
 	ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     #ssl_ciphers         AES128-SHA:AES256-SHA:RC4-SHA:DES-CBC3-SHA:RC4-MD5;
 	#ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!3DES:!aNULL:!MD5:!ADH:!RC4;
-    ssl_certificate   /opt/nginx/sslkey/app.test.com.crt;
-    ssl_certificate_key /opt/nginx/sslkey/app.test.com.key;
+    ssl_certificate   /opt/nginx_data/sslkey/app.test.com.crt;
+    ssl_certificate_key /opt/nginx_data/sslkey/app.test.com.key;
     ssl_session_cache   shared:SSL:10m;
     ssl_session_timeout 10m;
     root app.test.com;

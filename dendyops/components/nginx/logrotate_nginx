@@ -1,4 +1,4 @@
-/opt/nginx/logs/*.log {
+/opt/nginx_data/logs/*.log {
 	daily
 	missingok
 	rotate 31
@@ -7,6 +7,6 @@
 	create 644 nginx root
 	sharedscripts
 	postrotate
-		[ ! -f /opt/nginx/logs/nginx.pid ] || kill -USR1 `cat /opt/nginx/logs/nginx.pid`
+		[ ! -f /opt/nginx_data/logs/nginx.pid ] || kill -USR1 `cat /opt/nginx_data/logs/nginx.pid`
 	endscript
 }

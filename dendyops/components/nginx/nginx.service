@@ -4,11 +4,11 @@ After=network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
-PIDFile=/opt/nginx/logs/nginx.pid
+PIDFile=/opt/nginx_data/logs/nginx.pid
 # Nginx will fail to start if /run/nginx.pid already exists but has the wrong
 # SELinux context. This might happen when running `nginx -t` from the cmdline.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1268621
-ExecStartPre=/usr/bin/rm -f /opt/nginx/logs/nginx.pid
+ExecStartPre=/usr/bin/rm -f /opt/nginx_data/logs/nginx.pid
 ExecStartPre=/opt/nginx/sbin/nginx -t
 ExecStart=/opt/nginx/sbin/nginx
 ExecReload=/bin/kill -s HUP $MAINPID
