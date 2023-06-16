@@ -37,6 +37,7 @@ tar -zxvf   ${NGINX_PACKAGE}
 cd          ${NGINX_VERSION}
 [ -d /opt/${NGINX_VERSION} ] &&  mv /opt/${NGINX_VERSION}{,.bak.$(date +%U%T)}
 [ -L /opt/nginx ] && mv /opt/nginx{,.bak.$(date +%U%T)}
+[ -d /opt/nginx_data ] &&  mv /opt/nginx_data{,.bak.$(date +%U%T)}
 ./configure  \
  --prefix=/opt/nginx \
  --conf-path=/opt/nginx_data/conf/nginx.conf \
@@ -56,7 +57,8 @@ make -j $(nproc)
 make  install 
 mv /opt/nginx /opt/${NGINX_VERSION}
 ln -s /opt/${NGINX_VERSION} /opt/nginx
-mkdir -p /opt/nginx_data/conf.d/  /opt/nginx_data/sslkey  /opt/nginx_data/sslkey/none /opt/nginx_data/temp
+
+mkdir -p /opt/nginx_data/conf.d/  /opt/nginx_data/sslkey  /opt/nginx_data/sslkey/none /opt/nginx_data/temp /opt/nginx_data/logs
 [ -f /opt/nginx_data/conf/nginx.conf               ] && mv /opt/nginx_data/conf/nginx.conf{,.bak.$(date +%U%T)}  && cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx_data/conf/
 [ -f /opt/nginx_data/conf.d/nginx_status.conf ] || cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx_data/conf.d/
 [ -f /etc/logrotate.d/nginx                   ] || cp  /opt/dendyops/components/nginx/logrotate_nginx     /etc/logrotate.d/nginx
@@ -69,8 +71,8 @@ chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx /opt/nginx_data
 
 chmod 644 /opt/nginx_data/conf/nginx.conf
 chmod 644  /etc/logrotate.d/nginx
-chmod 644  /opt/nginx_data/conf/conf.d/nginx_status.conf
-chmod 644  /opt/nginx_data/conf/conf.d/default.conf
+chmod 644  /opt/nginx_data/conf.d/nginx_status.conf
+chmod 644  /opt/nginx_data/conf.d/default.conf
 cd /opt/nginx_data/sslkey/none
 [ -f none.key ] && rm -f none.key 
 [ -f none.pub ] && rm -f none.pub
