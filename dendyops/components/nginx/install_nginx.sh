@@ -39,7 +39,7 @@ cd          ${NGINX_VERSION}
 [ -L /opt/nginx ] && mv /opt/nginx{,.bak.$(date +%U%T)}
 ./configure  \
  --prefix=/opt/nginx \
- --conf-path=/opt/nginx_data/conf/ \
+ --conf-path=/opt/nginx_data/conf/nginx.conf \
  --user=nginx \
  --group=nginx  \
  --with-pcre \
