@@ -41,6 +41,7 @@ cd          ${NGINX_VERSION}
 ./configure  \
  --prefix=/opt/nginx \
  --conf-path=/opt/nginx_data/conf/nginx.conf \
+ --error-log-path=/opt/nginx_data/logs/error.log \
  --user=nginx \
  --group=nginx  \
  --with-pcre \
