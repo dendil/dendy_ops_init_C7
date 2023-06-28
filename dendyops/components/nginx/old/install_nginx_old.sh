@@ -37,44 +37,27 @@ tar -zxvf   ${NGINX_PACKAGE}
 cd          ${NGINX_VERSION}
 [ -d /opt/${NGINX_VERSION} ] &&  mv /opt/${NGINX_VERSION}{,.bak.$(date +%U%T)}
 [ -L /opt/nginx ] && mv /opt/nginx{,.bak.$(date +%U%T)}
-[ -d /opt/nginx_data ] &&  mv /opt/nginx_data{,.bak.$(date +%U%T)}
-./configure  \
- --prefix=/opt/nginx \
- --conf-path=/opt/nginx_data/conf/nginx.conf \
- --error-log-path=/opt/nginx_data/logs/error.log \
- --user=nginx \
- --group=nginx  \
- --with-pcre \
- --with-stream  \
- --with-http_ssl_module \
- --with-http_flv_module \
- --with-http_stub_status_module \
- --with-http_v2_module \
- --with-http_gzip_static_module \
- --with-http_realip_module  \
- --add-module=/opt/src/nginx-module-vts
-
+./configure  --prefix=/opt/nginx --with-http_ssl_module --user=nginx --group=nginx  --with-http_flv_module --with-http_stub_status_module --with-http_v2_module --with-http_gzip_static_module --with-pcre --with-http_realip_module  --with-stream  --add-module=/opt/src/nginx-module-vts
 make -j $(nproc)
 make  install 
 mv /opt/nginx /opt/${NGINX_VERSION}
 ln -s /opt/${NGINX_VERSION} /opt/nginx
-
-mkdir -p /opt/nginx_data/conf.d/  /opt/nginx_data/sslkey  /opt/nginx_data/sslkey/none /opt/nginx_data/temp /opt/nginx_data/logs
-[ -f /opt/nginx_data/conf/nginx.conf          ] && mv /opt/nginx_data/conf/nginx.conf{,.bak.$(date +%U%T)}  && cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx_data/conf/
-[ -f /opt/nginx_data/conf.d/nginx_status.conf ] || cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx_data/conf.d/
+mkdir -p /opt/nginx/conf/conf.d/  /opy/nginx/sslkey  /opt/nginx/sslkey/none
+[ -f /opt/nginx/conf/nginx.conf               ] && rm -fr /opt/nginx/conf/nginx.conf  && cp  /opt/dendyops/components/nginx/nginx.conf          /opt/nginx/conf/
+[ -f /opt/nginx/conf/conf.d/nginx_status.conf ] || cp  /opt/dendyops/components/nginx/nginx_status.conf   /opt/nginx/conf/conf.d/
 [ -f /etc/logrotate.d/nginx                   ] || cp  /opt/dendyops/components/nginx/logrotate_nginx     /etc/logrotate.d/nginx
 [ -f /usr/lib/systemd/system/nginx.service    ] || cp  /opt/dendyops/components/nginx/nginx.service       /usr/lib/systemd/system/nginx.service
-[ -f /opt/nginx_data/conf.d/default.conf      ] || cp  /opt/dendyops/components/nginx/default.conf        /opt/nginx_data/conf.d/default.conf
+[ -f /opt/nginx/conf/conf.d/default.conf      ] || cp  /opt/dendyops/components/nginx/default.conf        /opt/nginx/conf/conf.d/default.conf
 
 
 
-chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx /opt/nginx_data
+chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx
 
-chmod 644 /opt/nginx_data/conf/nginx.conf
+chmod 644 /opt/nginx/conf/nginx.conf
 chmod 644  /etc/logrotate.d/nginx
-chmod 644  /opt/nginx_data/conf.d/nginx_status.conf
-chmod 644  /opt/nginx_data/conf.d/default.conf
-cd /opt/nginx_data/sslkey/none
+chmod 644  /opt/nginx/conf/conf.d/nginx_status.conf
+chmod 644  /opt/nginx/conf/conf.d/default.conf
+cd /opt/nginx/sslkey/none
 [ -f none.key ] && rm -f none.key 
 [ -f none.pub ] && rm -f none.pub
 [ -f none.csr ] && rm -f none.csr
@@ -88,12 +71,3 @@ systemctl enable nginx
 
 
 echo "nginx install ${NGINX_VERSION} complete! "
-
-
-
-
-
-
-
-
-

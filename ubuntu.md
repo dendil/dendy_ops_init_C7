@@ -5,12 +5,12 @@
 apt install ntpdate
 ntpdate  0.cn.pool.ntp.org
 timedatectl set-timezone Asia/Shanghai
-timedatectl set-local-rtc 1
-timedatectl set-ntp yes
+#timedatectl set-local-rtc 1
+#timedatectl set-ntp yes
 
 
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak 
-0sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 sed -i 's/PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
 echo "UseDNS no" >>/etc/ssh/sshd_config
 echo -e 'dendy!@#$%^\ndendy!@#$%^'  |passwd root
@@ -20,13 +20,13 @@ vim /etc/netplan/00-installer-config.yaml
 eth0
 
 
-echo "ulimit -SHn 655350" >>/etc/profile
-echo "fs.file-max = 655350" >>/etc/sysctl.conf
-echo "root soft nofile 655350" >>/etc/security/limits.conf
-echo "root hard nofile 655350" >>/etc/security/limits.conf
-echo "* soft nofile 655350" >>/etc/security/limits.conf
-echo "* hard nofile 655350" >>/etc/security/limits.conf
-echo "session required pam_limits.so" >>/etc/pam.d/common-session
+echo "ulimit -SHn 655350"               >> /etc/profile
+echo "fs.file-max = 655350"             >> /etc/sysctl.conf
+echo "root soft nofile 655350"          >> /etc/security/limits.conf
+echo "root hard nofile 655350"          >> /etc/security/limits.conf
+echo "* soft nofile 655350"             >> /etc/security/limits.conf
+echo "* hard nofile 655350"             >> /etc/security/limits.conf
+echo "session required pam_limits.so"   >> /etc/pam.d/common-session
 source /etc/profile
 echo 'export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  `whoami` "' >>/etc/profile
 
@@ -60,11 +60,9 @@ apt-get update
 
 apt-get install -y git ntp ntpdate lrzsz lftp wget unzip zip bash-completion tree elinks nmap net-tools tcptraceroute aptitude dos2unix net-tools htop iftop sshuttle
 
-timedatectl set-timezone Asia/Shanghai
-
-apt-get -y install ntpdate
-
-sed -i '/# By default this script does nothing./a ntpdate -u ntp1.aliyun.com' /etc/rc.local
+# timedatectl set-timezone Asia/Shanghai
+# apt-get -y install ntpdate
+# sed -i '/# By default this script does nothing./a ntpdate -u ntp1.aliyun.com' /etc/rc.local
 
 chmod a+x /etc/rc.local
 apt-get autoclean 
