@@ -437,7 +437,7 @@ function config_yum(){
     if [  -s ${Yum_Path}/${Repo_Base} ]; then
 	   md5sum_check ${Lin_Path}/${Repo_ali_base}  ${Yum_Path}/${Repo_Base}
 	   if [ $? -eq 0 ] ;then 
-	       log_info "ali yum source  completed ! "
+	       log_info "hw yum source  completed ! "
 	   else 
 	       mv ${Yum_Path}/${Repo_Base}{,.$(date +%F)}
 	       mv ${Lin_Path}/${Repo_ali_base} ${Yum_Path}/${Repo_Base}
@@ -445,25 +445,25 @@ function config_yum(){
     else
 	   mv ${Yum_Path}/${Repo_Base}{,.$(date +%F)}
 	   mv ${Lin_Path}/${Repo_ali_base} ${Yum_Path}/${Repo_Base}
-        Msg "ali yum CentOS-Base.repo source  completed ! "
+        Msg "hw yum CentOS-Base.repo source  completed ! "
     fi
-    if ! curl -o ${Lin_Path}/${Repo_ali_epel} http://mirrors.aliyun.com/repo/epel-7.repo >/dev/null 2>&1 ; then
-	   log_error "please config network "
-       shell_unlock
-	   exit 1
-    fi
-    if [  -s ${Yum_Path}/${Repo_epel} ]; then
-	   md5sum_check ${Lin_Path}/${Repo_ali_epel}  ${Yum_Path}/${Repo_epel}
-	   if [ $? -eq 0 ];then
-	       log_info "ali yum epel source  completed ! "
-	   else
-	       mv ${Yum_Path}/${Repo_epel}{,.$(date +%F)}
-	       mv ${Lin_Path}/${Repo_ali_epel} ${Yum_Path}/${Repo_epel}
-	   fi
-    else
-	   mv ${Lin_Path}/${Repo_ali_epel} ${Yum_Path}/${Repo_epel}
-	   Msg "ali yum epel source  completed ! "
-    fi
+    # if ! curl -o ${Lin_Path}/${Repo_ali_epel} http://mirrors.aliyun.com/repo/epel-7.repo >/dev/null 2>&1 ; then
+	#    log_error "please config network "
+    #    shell_unlock
+	#    exit 1
+    # fi
+    # if [  -s ${Yum_Path}/${Repo_epel} ]; then
+	#    md5sum_check ${Lin_Path}/${Repo_ali_epel}  ${Yum_Path}/${Repo_epel}
+	#    if [ $? -eq 0 ];then
+	#        log_info "ali yum epel source  completed ! "
+	#    else
+	#        mv ${Yum_Path}/${Repo_epel}{,.$(date +%F)}
+	#        mv ${Lin_Path}/${Repo_ali_epel} ${Yum_Path}/${Repo_epel}
+	#    fi
+    # else
+	#    mv ${Lin_Path}/${Repo_ali_epel} ${Yum_Path}/${Repo_epel}
+	#    Msg "ali yum epel source  completed ! "
+    # fi
     if [ ! -f  /etc/yum.repo.d/test ];then 
         yum clean all  >/dev/null 2>&1 && echo "1" > /etc/yum.repos.d/test
         Msg "yum is  completed! "
@@ -473,8 +473,8 @@ function config_yum(){
 function install_tools(){
  	SOFT=" lrzsz dos2unix ntp gcc bc tcl  expect rsync chrony vim \
       wget bash-completion lrzsz nmap  tree htop iftop \
-      net-tools python3  yum-utils curl bind-utils unzip mtr tailf net-tools jq"
-    
+      net-tools python3  yum-utils curl bind-utils unzip mtr tailf net-tools jq "
+    yum install epel-release -y 
     yum install  $SOFT  -y >>/dev/null 2>&1 &
     Msg "$SOFT installed"
 }

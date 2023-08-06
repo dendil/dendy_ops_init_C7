@@ -67,6 +67,9 @@ hostname-s  <newhostname>
 ```bash
 #编译安装最新版nginx
 install_nginx
+
+/opt/dendyops/components/nginx/install_nginx.sh
+
 ```
 
 
@@ -113,7 +116,7 @@ Install Docker latest version:
 ### Add juna PublicKey
 ```bash
 /opt/dendyops/components/juna/pubkey/add_keys.sh
-bash /opt/dendyops/components/juna/deploykey/install_deploykey.md
+
 
 ```
 
@@ -258,36 +261,3 @@ echo "$(/opt/dendyops/components/utils/get_ip.sh) <gitlab_domain>" >> /etc/hosts
 
 
 
-### Install Nexus
-
-```bash
-# Install default Nexus (nexus-3.16.1-02)
-/opt/dendyops/components/nexus/install_nexus.sh
-
-# Install specific Nexus version
-# /opt/dendyops/components/nexus/install_nexus.sh 3.16.1-02
-/opt/dendyops/components/nexus/install_nexus.sh <version>
-```
- 
-
-### Install GitLab with Docker Compose
-
-```bash
-/opt/dendyops/components/gitlab-docker/install_gitlab.sh
-```
-
-
-
-### Install salt-master  salt-ssh 
-```bash
-/opt/dendyops/components/saltstack/install_salt_master.sh
-
-```
-
-
-
-### Install salt-minion
-```bash
-/opt/dendyops/components/saltstack/install_salt_minion.sh
-
-```
