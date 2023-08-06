@@ -65,15 +65,15 @@ mkdir -p /opt/nginx_data/conf.d/  /opt/nginx_data/sslkey  /opt/nginx_data/sslkey
 [ -f /etc/logrotate.d/nginx                   ] || cp  /opt/dendyops/components/nginx/logrotate_nginx     /etc/logrotate.d/nginx
 [ -f /usr/lib/systemd/system/nginx.service    ] || cp  /opt/dendyops/components/nginx/nginx.service       /usr/lib/systemd/system/nginx.service
 [ -f /opt/nginx_data/conf.d/default.conf      ] || cp  /opt/dendyops/components/nginx/default.conf        /opt/nginx_data/conf.d/default.conf
-
-
+[ -f /opt/nginx_data/general.conf             ] || cp  /opt/dendyops/components/nginx/general.conf        /opt/nginx_data/general.conf
+[ -f /opt/nginx_data/proxy.conf               ] || cp  /opt/dendyops/components/nginx/proxy.conf          /opt/nginx_data/proxy.conf
+[ -f /opt/nginx_data/security.conf            ] || cp  /opt/dendyops/components/nginx/security.conf       /opt/nginx_data/security.conf
 
 chown -R nginx:nginx /opt/${NGINX_VERSION}  /opt/nginx /opt/nginx_data
 
-chmod 644 /opt/nginx_data/conf/nginx.conf
+chmod 644  -R /opt/nginx_data/
 chmod 644  /etc/logrotate.d/nginx
-chmod 644  /opt/nginx_data/conf.d/nginx_status.conf
-chmod 644  /opt/nginx_data/conf.d/default.conf
+
 cd /opt/nginx_data/sslkey/none
 [ -f none.key ] && rm -f none.key 
 [ -f none.pub ] && rm -f none.pub
