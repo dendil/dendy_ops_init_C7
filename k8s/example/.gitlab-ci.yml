@@ -1,0 +1,65 @@
+before_script:
+  - source .gitlab-ci.${CI_COMMIT_REF_NAME}.env
+cache:  #3
+  paths:
+    - .m2/repository
+    - xxxx-start/target/*.jar
+stages:  #5
+  - package
+  - build
+  - deploy
+
+maven-package:  #6
+  stage: package
+  image: maven:3.5-jdk-8-alpine
+  tags:
+    - ${CI_PROJECT_NAME}
+  only:
+    - master
+    - test
+  # 设置 Maven 阿里云镜像 也可以在 /root/.m2 目录中编辑 settings.xml文件 添加阿里云镜像信息
+  script:
+    - rm -rf /root/.m2/settings.xml
+    - echo -e '<?xml version="1.0" encoding="UTF-8"?><settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"><mirrors><mirror><id>alimaven</id><name>aliyun maven</name><url>http://maven.aliyun.com/nexus/content/groups/public/</url><mirrorOf>central</mirrorOf></mirror></mirrors></settings>' > /root/.m2/settings.xml
+    - mvn clean package -Dmaven.test.skip=true
+#  注释artifacts 避免每次都要下载上传耗费时间， 用cache代替
+#  artifacts:
+#    paths:
+#      - tencreat-start/target/*.jar
+#    expire_in: 1 hour
+
+
+# 正式环境
+docker-build-master:
+  stage: build
+  services:  #4  配置需要用到的额外的服务。docker:dind，用于在 docker 中运行 docker 的一种东西，在项目的构建中需要。
+    - docker:dind
+  tags:
+    - $CI_PROJECT_NAME
+  only:
+    - test
+    - master
+  script:
+    - docker build -t $DOCKER_REPO/$DOCKER_IAMGE --build-arg ACTIVE_PROFILE=$SPRING_ACTIVE_PROFILE .     # 构件镜像
+    # 推送远程镜像
+#    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_REPO
+#    - docker push $DOCKER_REPO/$DOCKER_IAMGE
+
+docker-deploy-master:
+  stage: deploy
+  image: ubuntu:latest
+  tags:
+    - $CI_PROJECT_NAME
+  only:
+    - test
+    - master
+  script:
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval $(ssh-agent -s)
+    - echo "$SERVER_SSH_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - ssh root@$SERVER_IP "docker stop $APP_NAME;sleep 10; docker rm $APP_NAME; docker container run -d --name $APP_NAME -p $PORT:6060 -p $PORTV2:6060 -p $WS_PORT:6062 -v $LOG_PATH:/usr/mydata/app/logs -v /usr/mydata/app/upload:/usr/mydata/app/upload $DOCKER_REPO/$DOCKER_IAMGE;docker system prune -f"
+    # 从远程拉取
+#    - ssh root@$SERVER_IP "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_REPO;docker stop $APP_NAME; sleep 10;docker rm $APP_NAME; docker pull $DOCKER_REPO/$DOCKER_IAMGE; docker container run -d --name $APP_NAME -p $PORT:6060 -p $WS_PORT:6062 -v $LOG_PATH:/usr/mydata/app/logs -v /usr/mydata/app/upload:/usr/mydata/app/upload $DOCKER_REPO/$DOCKER_IAMGE;  docker images -f "dangling=true" -q | xargs docker rmi;"

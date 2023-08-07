@@ -1,0 +1,55 @@
+stages:
+- name: Build
+  steps:
+  - runScriptConfig:
+      image: maven:3.5-jdk-8-alpine
+      shellScript: |-
+        mkdir -p /root/.m2
+        touch /root/.m2/settings.xml 
+        echo -e '<?xml version="1.0" encoding="UTF-8"?><settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"><mirrors><mirror><id>alimaven</id><name>aliyun maven</name><url>http://maven.aliyun.com/nexus/content/groups/public/</url><mirrorOf>central</mirrorOf></mirror></mirrors></settings>' > /root/.m2/settings.xml
+        mvn clean package -Dmaven.test.skip=true
+- name: Publish
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      # tag 代码库名称： 流水线的 Build Number
+      tag: ${CICD_GIT_REPO_NAME}:${CICD_EXECUTION_SEQUENCE}
+      # rancher默认git repo
+#      registry: 127.0.0.1:34398
+    env:
+      # 按分支选择不同的profile
+      PLUGIN_BUILD_ARGS: "ACTIVE_PROFILE=${CICD_GIT_BRANCH}"
+      PLUGIN_INSECURE: "true"
+      PLUGIN_DEBUG: "true"
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
+    when:
+      branch:
+        include:
+          - master
+- name: Deploy-test1
+  steps:
+    - applyYamlConfig:
+        path: ./deployment-test1.yaml
+      when:
+        branch:
+          include:
+            - test1
+- name: Deploy-test2
+  steps:
+    - applyYamlConfig:
+        path: ./deployment-test2.yaml
+      when:
+        branch:
+          include:
+            - test2
+timeout: 60
+branch:
+  include:
+    - master
+    - test1
+    - test2
+notification: {}
