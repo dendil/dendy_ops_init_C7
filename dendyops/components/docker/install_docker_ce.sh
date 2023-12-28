@@ -33,7 +33,13 @@ if [ -n "${install_path}" ] ; then
    "registry-mirrors": ["https://jltw059v.mirror.aliyuncs.com"],
    "bip": "172.16.${_bip_4}.1/24",  
    "exec-opts": ["native.cgroupdriver=systemd"],
-   "live-restore": true
+   "live-restore": true,
+   "log-driver": "json-file",
+   "log-opts": {
+    "max-size": "100m",
+    "max-file": "3"
+  }
+
 }
 EOF
 mkdir ${install_path}/docker -p
