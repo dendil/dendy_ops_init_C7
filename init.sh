@@ -522,20 +522,20 @@ function update_ops(){
 }
 
 
-function add_sudoer(){  
-    Msg 'add/mod_sudoer........ '
-    if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
-        useradd dendy
-        echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
-        Msg 'add/mod_sudoer........user add '
-    fi
-    if [ `grep dendy /etc/sudoers |wc -l` -lt 1 ];then
-        chmod u+w /etc/sudoers
-        echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-        chmod u-w /etc/sudoers
-        Msg 'add/mod_sudoer......../etc/sudoers  mod..ed '
-    fi
-}
+# function add_sudoer(){  
+#     Msg 'add/mod_sudoer........ '
+#     if [  `cat /etc/passwd  |grep dendy|wc -l ` -lt 1 ];then
+#         useradd dendy
+#         echo 'QQwechat12345678990' | passwd dendy --stdin >/dev/null 2>&1
+#         Msg 'add/mod_sudoer........user add '
+#     fi
+#     if [ `grep dendy /etc/sudoers |wc -l` -lt 1 ];then
+#         chmod u+w /etc/sudoers
+#         echo 'dendy ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+#         chmod u-w /etc/sudoers
+#         Msg 'add/mod_sudoer......../etc/sudoers  mod..ed '
+#     fi
+# }
 add_scan_sshd(){
     Msg "add scan_sshd ........"
 [ -d /root/yunwei/monitor/ ] || mkdir -p /root/yunwei/monitor
@@ -600,7 +600,7 @@ function main(){
     #清除版本信息（安全操作） 一般不开启
     #HideVersion
     install_ops
-    add_sudoer
+    #add_sudoer
     Safesshd
     #安全化 ssh
     # 扩大文件描述符

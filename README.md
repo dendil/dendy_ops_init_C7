@@ -14,7 +14,7 @@ git clone https://github.com/dendil/dendy_ops_init_C7.git $t_dir
 cd  /tmp/dendy_ops_init_C7
 find . -name '*.sh' -exec chmod u+x {} \;
 
-bash init.sh main    
+bash init.sh out
 
 
 bash init.sh main        (国内)
